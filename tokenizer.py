@@ -8,7 +8,7 @@ from unidecode import unidecode
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
-    def __init__(self, lower=True, keepPunc=False):
+    def __init__(self, lower=True):
         """ """
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
@@ -41,9 +41,30 @@ class Tokenizer(object):
             return spacedString
 
     def clean_and_tokenize(self, rawString):
-        
+
 
 
 class Language(object):
     """ Defines properties of the Language being delt with """
-    def __init__(self, name, tokenizer):
+    def __init__(self, name, tokenizer, vocabSet=None):
+        assert isinstance(tokenizer, Tokenizer), f'tokenizer expected type Tokenizer()'
+        self.name = name
+        self.tokenizer = tokenizer
+        self.vocabSet = vocabSet
+        self.vocabSize = len(vocabSet) if vocabSet else None
+        self.idx = None
+        self.reverseIdx = None
+
+    def build_vocab_set():
+
+    def build_idx(self):
+        if self.vocabSet:
+            self.idx = {word : i for i, word in enumerate(vocabSet)}
+        else:
+            raise ValueError('Vocab Set has not yet been initialized.')
+
+    def build_reverse_idx(self):
+        if self.idx:
+            self.reverseIdx = {i : word for word, i in self.idx.items()}
+        else:
+            raise ValueError('Idx has not yet been initialized.')

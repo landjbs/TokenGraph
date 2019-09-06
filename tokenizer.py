@@ -5,6 +5,7 @@ Language() class for storing metrics about the language used.
 
 import re
 from unidecode import unidecode
+from collections import Counter
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
@@ -21,7 +22,7 @@ class Tokenizer(object):
     def _to_lower(self, text):
         return text.lower()
 
-    def _tokenize(self, text):
+    def tokenize(self, text):
         return text.split()
 
     def clean_text(self, rawString):
@@ -41,21 +42,29 @@ class Tokenizer(object):
             return spacedString
 
     def clean_and_tokenize(self, rawString):
-
+        """ Returns counter of tokens and their freqs in rawString """
+        cleanString = self.clean_text(rawString)
+        tokenList = self.tokenize(cleanString)
+        tokenNum = len(tokenList)
+        tokenCounter = Counter({token : (count / tokenNum)
+                        for token, count in Counter(tokenList).items()})
+        return tokenCounter
 
 
 class Language(object):
     """ Defines properties of the Language being delt with """
-    def __init__(self, name, tokenizer, vocabSet=None):
-        assert isinstance(tokenizer, Tokenizer), f'tokenizer expected type Tokenizer()'
+    def __init__(self, name, tokenizer, vocabFreqs=None):
+        assert isinstance(tokenizer, Tokenizer), 'tokenizer expected type Tokenizer()'
+        assert isinstance(vocabFreqs, None) or isinstance(vocabFreqs, dict), 'vocabFreqs expected either dict or None'
         self.name = name
         self.tokenizer = tokenizer
-        self.vocabSet = vocabSet
+        self.vocabFreqs = vocabFreqs
         self.vocabSize = len(vocabSet) if vocabSet else None
         self.idx = None
         self.reverseIdx = None
 
-    def build_vocab_set():
+    def build_vocab_freqs(self, textString):
+        textTokens =
 
     def build_idx(self):
         if self.vocabSet:

@@ -63,12 +63,12 @@ class Language(object):
         self.idx = None
         self.reverseIdx = None
 
-    def build_vocab_freqs(self, textString):
-        textTokens =
+    def vocab_freqs_from_string(self, textString):
+        self.vocabFreqs = tokenizer.clean_and_tokenize(textString)
 
     def build_idx(self):
-        if self.vocabSet:
-            self.idx = {word : i for i, word in enumerate(vocabSet)}
+        if self.vocabFreqs:
+            self.idx = {word : i for i, word in enumerate(vocabFreqs)}
         else:
             raise ValueError('Vocab Set has not yet been initialized.')
 

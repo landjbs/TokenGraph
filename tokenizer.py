@@ -14,9 +14,9 @@ class Tokenizer(object):
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
         self.lower = lower
-        # matches non-alphanumeric, space, or sentence-ending punctuation (dash must be at end)
+        # matches non-alphanumeric, space, or sentence-ending punctuation
         self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
-        # matches any sequence of tabs, newlines, spaces, underscores, and dashes
+        # matches sequence of tabs, newlines, spaces, underscores, and dashes
         self.SPACE = re.compile(r'[\t\n\s_.?!:;/<>*&^%$#@()"~`+-]+')
 
     def _to_lower(self, text):
@@ -54,8 +54,13 @@ class Tokenizer(object):
 class Language(object):
     """ Defines properties of the Language being delt with """
     def __init__(self, name, tokenizer, vocabFreqs=None):
-        assert isinstance(tokenizer, Tokenizer), 'tokenizer expected type Tokenizer()'
-        assert isinstance(vocabFreqs, None) or isinstance(vocabFreqs, dict), 'vocabFreqs expected either dict or None'
+        assert isinstance(tokenizer, Tokenizer), ('tokenizer expected type'
+                                                'Tokenizer() but found type'
+                                                f'{type(tokenizer)}')
+        assert (isinstance(vocabFreqs, None)
+                or isinstance(vocabFreqs, dict)), ('vocabFreqs expected either'
+                                                    'dict or None, but found'
+                                                    f'type {type(vocabFreqs)}.')
         self.name = name
         self.tokenizer = tokenizer
         self.vocabFreqs = vocabFreqs

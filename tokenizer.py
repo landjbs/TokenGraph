@@ -46,14 +46,17 @@ class Tokenizer(object):
         else:
             return spacedString
 
-    def clean_and_tokenize(self, rawString):
+    def clean_and_tokenize(self, rawString, returnCounts=False):
         """ Returns counter of tokens and their freqs in rawString """
         cleanString = self.clean_text(rawString)
         tokenList = self.tokenize(cleanString)
         tokenNum = len(tokenList)
         tokenCounter = Counter({token : (count / tokenNum)
                         for token, count in Counter(tokenList).items()})
-        return tokenCounter
+        if returnCounts:
+            return tokenCounter, tokenNum
+        else:
+            return tokenCounter
 
     def build_freq_dict_from_folder(self, folderPath, tokenNum=50000):
         """ """
@@ -68,31 +71,24 @@ class Tokenizer(object):
             with open(f"{folderPath}/{file}") as FileObj:
                 # read in the current file
                 text = FileObj.read()
-                # find both greedy and subtokens in text
-                tokensFound = list(knowledgeFinder.find_rawTokens(text,
-                                                                knowledgeProcessor))
+                # find tokens in text
+                tokensFound, tokenNum = self.clean_and_tokenize(text,
+                                                            returnCounts=True)
                 # add tokens counts to tokenCounts counter
                 tokenCounts.update(tokensFound)
                 # add single appearance for each token found
                 tokenAppearances.update(set(tokensFound))
-                # find number of words in the current file
-                textLen = len(text.split())
                 # add number of words in current file to totalLength
-                totalLength += textLen
-
+                totalLength += tokenNum
         # lambdas for calculating termFreq and docFreq
         calc_termFreq = lambda tokenCount : tokenCount / totalLength
         calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
-
         # use total num to normalize tokenCounts and find frequency for each token
         freqDict = {token: (calc_termFreq(tokenCounts[token]),
                             calc_docFreq(tokenAppearances[token]))
                     for token in tokenCounts}
-
-        if outPath:
-            save(freqDict, outPath)
-
-        return freqDict
+        self.freqDict = freqDict
+        return True
 
 
 

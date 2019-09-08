@@ -4,6 +4,8 @@ Language() class for storing metrics about the language used.
 """
 
 import re
+from tqdm import tqdm
+from os import listdir
 from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
@@ -61,7 +63,36 @@ class Tokenizer(object):
         tokenAppearances = Counter()
         # initialize variable to count total number of words used
         totalLength = 0
-        
+        # find and iterate over list of files within folderPath
+        for i, file in enumerate(tqdm(listdir(folderPath))):
+            with open(f"{folderPath}/{file}") as FileObj:
+                # read in the current file
+                text = FileObj.read()
+                # find both greedy and subtokens in text
+                tokensFound = list(knowledgeFinder.find_rawTokens(text,
+                                                                knowledgeProcessor))
+                # add tokens counts to tokenCounts counter
+                tokenCounts.update(tokensFound)
+                # add single appearance for each token found
+                tokenAppearances.update(set(tokensFound))
+                # find number of words in the current file
+                textLen = len(text.split())
+                # add number of words in current file to totalLength
+                totalLength += textLen
+
+        # lambdas for calculating termFreq and docFreq
+        calc_termFreq = lambda tokenCount : tokenCount / totalLength
+        calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
+
+        # use total num to normalize tokenCounts and find frequency for each token
+        freqDict = {token: (calc_termFreq(tokenCounts[token]),
+                            calc_docFreq(tokenAppearances[token]))
+                    for token in tokenCounts}
+
+        if outPath:
+            save(freqDict, outPath)
+
+        return freqDict
 
 
 

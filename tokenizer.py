@@ -6,14 +6,17 @@ Language() class for storing metrics about the language used.
 import re
 from unidecode import unidecode
 from collections import Counter
+from flashtext import KeywordProcessor
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
-    def __init__(self, lower=True):
+    def __init__(self, lower=True, freqDict=None, tokenizer=None):
         """ """
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
         self.lower = lower
+        self.freqDict = freqDict
+        self.tokenizer = tokenizer
         # matches non-alphanumeric, space, or sentence-ending punctuation
         self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
@@ -50,6 +53,18 @@ class Tokenizer(object):
                         for token, count in Counter(tokenList).items()})
         return tokenCounter
 
+    def build_freq_dict_from_folder(self, folderPath, tokenNum=50000):
+        """ """
+        # initialize counter to map tokens to raw number of occurences
+        tokenCounts = Counter()
+        # initialize counter to map tokens to number of docs they appear in
+        tokenAppearances = Counter()
+        # initialize variable to count total number of words used
+        totalLength = 0
+        
+
+
+
 
 class Language(object):
     """ Defines properties of the Language being delt with """
@@ -67,6 +82,57 @@ class Language(object):
         self.vocabSize = len(vocabSet) if vocabSet else None
         self.idx = None
         self.reverseIdx = None
+
+
+    def fredDict_from_folderPath(folderPath, knowledgeProcessor, outPath=None):
+        """
+        Args: folderPath to folder containing files from which to read,
+        knowledgeProcessor for token extraction.
+        Returns: dict mapping knowledge tokens to tuple of (termFreq, docFreq)
+        observed in documents.
+            termFreq = (number of times a token is used) / (number of words used)
+            docFreq = log ((num of documents) / (num of documents with token))
+        """
+        # initialize counter to map knowledge tokens to raw number of occurences
+        tokenCounts = Counter()
+        # initialize counter to map knowledge tokens to number of docs they appear in
+        tokenAppearances = Counter()
+        # initialize variable to count total number of words used
+        totalLength = 0
+
+        # find and iterate over list of files within folderPath
+        for i, file in enumerate(os.listdir(folderPath)):
+            print(f"\tBuilding freqDict: {i}", end='\r')
+            with open(f"{folderPath}/{file}") as FileObj:
+                # read in the current file
+                text = FileObj.read()
+                # find both greedy and subtokens in text
+                tokensFound = list(knowledgeFinder.find_rawTokens(text,
+                                                                knowledgeProcessor))
+                # add tokens counts to tokenCounts counter
+                tokenCounts.update(tokensFound)
+                # add single appearance for each token found
+                tokenAppearances.update(set(tokensFound))
+                # find number of words in the current file
+                textLen = len(text.split())
+                # add number of words in current file to totalLength
+                totalLength += textLen
+
+        # lambdas for calculating termFreq and docFreq
+        calc_termFreq = lambda tokenCount : tokenCount / totalLength
+        calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
+
+        # use total num to normalize tokenCounts and find frequency for each token
+        freqDict = {token: (calc_termFreq(tokenCounts[token]),
+                            calc_docFreq(tokenAppearances[token]))
+                    for token in tokenCounts}
+
+        if outPath:
+            save(freqDict, outPath)
+
+        return freqDict
+
+
 
     def vocab_freqs_from_string(self, textString):
         self.vocabFreqs = tokenizer.clean_and_tokenize(textString)

@@ -12,13 +12,13 @@ from flashtext import KeywordProcessor
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
-    def __init__(self, lower=True, freqDict=None, tokenizer=None):
+    def __init__(self, lower=True):
         """ """
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
         self.lower = lower
-        self.freqDict = freqDict
-        self.tokenizer = tokenizer
+        self.freqDict = None
+        self.tokenizer = None
         # matches non-alphanumeric, space, or sentence-ending punctuation
         self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
@@ -58,7 +58,7 @@ class Tokenizer(object):
         else:
             return tokenCounter
 
-    def build_freq_dict_from_folder(self, folderPath, tokenNum=50000):
+    def build_freq_dict_from_folder(self, folderPath):
         """ """
         # initialize counter to map tokens to raw number of occurences
         tokenCounts = Counter()
@@ -90,6 +90,12 @@ class Tokenizer(object):
         self.freqDict = freqDict
         return True
 
+    def build_tokenizer(self, maxFreq, minFreq, tokenNum):
+        """
+        Builds tokenizer from self.freqDict taking tokenNum tokens between
+        max and minFreq
+        """
+        
 
 
 

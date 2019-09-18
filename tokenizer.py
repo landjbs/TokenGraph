@@ -95,13 +95,13 @@ class Tokenizer(object):
         Builds tokenizer from self.freqDict taking tokenNum tokens between
         max and minFreq
         """
-        
+
 
 
 
 class Language(object):
     """ Defines properties of the Language being delt with """
-    def __init__(self, name, tokenizer, vocabFreqs=None):
+    def __init__(self, name, tokenizer, vocabSet=None):
         assert isinstance(tokenizer, Tokenizer), ('tokenizer expected type'
                                                 'Tokenizer() but found type'
                                                 f'{type(tokenizer)}')
@@ -111,7 +111,7 @@ class Language(object):
                                                     f'type {type(vocabFreqs)}.')
         self.name = name
         self.tokenizer = tokenizer
-        self.vocabFreqs = vocabFreqs
+        self.vocabSet = vocabSet
         self.vocabSize = len(vocabSet) if vocabSet else None
         self.idx = None
         self.reverseIdx = None
@@ -159,13 +159,9 @@ class Language(object):
         freqDict = {token: (calc_termFreq(tokenCounts[token]),
                             calc_docFreq(tokenAppearances[token]))
                     for token in tokenCounts}
-
         if outPath:
             save(freqDict, outPath)
-
         return freqDict
-
-
 
     def vocab_freqs_from_string(self, textString):
         self.vocabFreqs = tokenizer.clean_and_tokenize(textString)

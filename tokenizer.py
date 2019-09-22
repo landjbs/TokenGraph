@@ -76,7 +76,24 @@ class Tokenizer(object):
         # initialize variable to count total number of words used
         totalLength = 0
         # iterate over wiki file
-        for article in self.wiki_iterator(path):
+        for text in self.wiki_iterator(path):
+            # find tokens in text
+            tokenList = text.split()
+            # count number of times each token appears
+            currentCounts = Counter(tokenList)
+            # get total length of text
+            wordCount = len(tokenList)
+            # add tokens counts to tokenCounts counter
+            tokenCounts.update(currentCounts)
+            # add single appearance for each token found
+            tokenAppearances.update(set(currentCounts))
+            # add number of words in current file to totalLength
+            totalLength += wordCount
+        # lambdas for calculating termFreq and docFreq
+        calc_termFreq = lambda tokenCount : tokenCount / totalLength
+        calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
+
+
 
 
 class Tokenizer(object):

@@ -78,7 +78,9 @@ class Tokenizer(object):
         # get base count of article num for tqdm
         articleCount = len([None for _ in self.wiki_iterator()])
         # iterate over wiki file
-        for text in tqdm(self.wiki_iterator(), total=articleCount):
+        for i, text in enumerate(tqdm(self.wiki_iterator(), total=articleCount)):
+            if i > 1000:
+                break
             # find tokens in text
             tokenList = text.split()
             # count number of times each token appears
@@ -101,7 +103,14 @@ class Tokenizer(object):
         self.freqDict = freqDict
         return True
 
-    def 
+    def filter_freq_dict(self, minFreq=0, maxFreq=1, tokenNum=50000):
+        """ Filters freq dict to tokenNum tokens between min and maxFreq """
+        qualifies = lambda freqTup : (maxFreq > freqTup[0] > minFreq)
+        filteredFreqDict = {token : freqTup
+                            for i, (token, freqTup) in enumerate(self.freqDict)
+                            if (qualifies(freqTup) and (i <= tokenNum))}
+        self.freqDict = filteredFreqDict
+        return True
 
 
 

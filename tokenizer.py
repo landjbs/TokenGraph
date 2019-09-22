@@ -4,6 +4,7 @@ Language() class for storing metrics about the language used.
 """
 
 import re
+from numpy import log
 from tqdm import tqdm
 from os import listdir
 from unidecode import unidecode
@@ -82,7 +83,8 @@ class Tokenizer(object):
             if i > 1000:
                 break
             # find tokens in text
-            tokenList = text.split()
+            cleanText = self.clean(text)
+            tokenList = cleanText.split()
             # count number of times each token appears
             currentCounts = Counter(tokenList)
             # get total length of text
@@ -107,11 +109,18 @@ class Tokenizer(object):
         """ Filters freq dict to tokenNum tokens between min and maxFreq """
         qualifies = lambda freqTup : (maxFreq > freqTup[0] > minFreq)
         filteredFreqDict = {token : freqTup
-                            for i, (token, freqTup) in enumerate(self.freqDict)
-                            if (qualifies(freqTup) and (i <= tokenNum))}
+                            for i, (token, freqTup)
+                            in enumerate(self.freqDict.items())
+                            if (qualifies(freqTup) and (i < tokenNum))}
         self.freqDict = filteredFreqDict
         return True
 
+    # methods for tokenizer modification
+    def build_tokenizer(self):
+        """ Builds flashtext tokenizer from freq dict """
+        assert (self.freqDict), f'freqDict must be built before tokenizer.'
+        self.tokenizer.add_keywords_from_dict(self.freqDict)
+        return True
 
 
 class _Tokenizer(object):

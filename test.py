@@ -2,8 +2,6 @@ from tokenizer import Tokenizer
 
 x = Tokenizer()
 
-x.freq_dict_from_wiki_file()
+x.language_from_wiki_file(minFreq=0, maxFreq=1, tokenNum=100)
 
-x.filter_freq_dict(tokenNum=10)
-
-print((x.freqDict))
+print(x)

@@ -69,7 +69,7 @@ class Tokenizer(object):
 
     # methods for gathering language data
     def freq_dict_from_wiki_file(self):
-        """ Builds freq dict from wiki iterator """
+        """ Builds freq dict from wiki iterator. Updates vocabSize """
         # initialize counter to map tokens to raw number of occurences
         tokenCounts = Counter()
         # initialize counter to map tokens to number of docs they appear in
@@ -109,7 +109,7 @@ class Tokenizer(object):
     def filter_freq_dict(self, minFreq=0, maxFreq=1, tokenNum=50000):
         """
         Filters freq dict to tokenNum tokens between min and maxFreq. Updates
-        tokenizer, idx and reverse idx in conjunction.
+        vocab size in conjunction.
         """
         qualifies = lambda freqTup : (maxFreq > freqTup[0] > minFreq)
         filteredFreqDict = {token : freqTup
@@ -129,8 +129,20 @@ class Tokenizer(object):
 
     # methods for idx modification
     def build_idx(self):
-        """ Builds idx dict from freq dict """
+        assert (self.freqDict), f'freqDict must be built before idx.'
+        self.idx = {word : i for i, word in enumerate(self.freqDict)}
 
+    def build_reverse_idx(self):
+        assert (self.idx), f'idx must be built before reverse idx.'
+        self.reverseIdx = {i : word for word, i in self.idx.items()}
+
+    # higher level initialization methods
+    def language_from_wiki_file(self, minFreq, maxFreq, tokenNum):
+        """
+        Builds freqDict, vocabSize, tokenizer, idx, and reverse idx from wiki
+        file. Takes tokenNum tokens between minFreq and maxFreq.
+        """
+        
 
 class _Tokenizer(object):
     """ Stores all methods for working with text """

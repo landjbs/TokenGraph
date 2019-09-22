@@ -28,6 +28,27 @@ class Tokenizer(object):
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
         self.SPACE = re.compile(r'[\t\n\s_.?!:;/<>*&^%$#@()"~`+-]+')
 
+    # methods for preprocessing text
+    def to_lower(self, rawString):
+        """ Lowercases string """
+        return rawString.lower()
+
+    def clean(self, rawString):
+        """
+        Cleans rawString by replacing spaceMatcher and tagMatcher with a single
+        space, removing non-alpha chars, and lowercasing alpha chars
+        """
+        unicodedString = unidecode(rawString)
+        # replace STRIP Matcher with ""
+        cleanedString = re.sub(self.STRIP, "", rawString)
+        # replace SPACE Matcher with " " and strip surround whitespace
+        spacedString = re.sub(self.SPACE, " ", cleanedString)
+        # lowercase the alpha chars that remain
+        if self.lower:
+            return self._to_lower(spacedString)
+        else:
+            return spacedString
+
 class Tokenizer(object):
     """ Stores all methods for working with text """
     def __init__(self, lower=True):

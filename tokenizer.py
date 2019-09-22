@@ -10,6 +10,7 @@ from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
 
+
 class Tokenizer(object):
     """ Stores all methods for working with text """
     def __init__(self, lower=True):
@@ -18,7 +19,7 @@ class Tokenizer(object):
                                         f'type {type(lower)}.')
         self.lower = lower
         self.freqDict = None
-        self.tokenizer = None
+        self.tokenizer = KeywordProcessor()
         # matches non-alphanumeric, space, or sentence-ending punctuation
         self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
@@ -36,9 +37,9 @@ class Tokenizer(object):
         space, removing non-alpha chars, and lowercasing alpha chars
         """
         unicodedString = unidecode(rawString)
-        # replace stripMatcher with ""
+        # replace STRIP Matcher with ""
         cleanedString = re.sub(self.STRIP, "", rawString)
-        # replace spaceMatcher with " " and strip surround whitespace
+        # replace SPACE Matcher with " " and strip surround whitespace
         spacedString = re.sub(self.SPACE, " ", cleanedString)
         # lowercase the alpha chars that remain
         if self.lower:
@@ -90,13 +91,16 @@ class Tokenizer(object):
         self.freqDict = freqDict
         return True
 
-    def build_tokenizer(self, maxFreq, minFreq, tokenNum):
+    def build_tokenizer(self, minFreq, maxFreq, tokenNum):
         """
         Builds tokenizer from self.freqDict taking tokenNum tokens between
         max and minFreq
         """
-
-
+        freq_filter = lambda tokenInfo : maxFreq > tokenInfo[1] > minFreq
+        validTokens = [token for token, freq in self.freqDict.items()
+                        if (minFreq < freq < maxFreq)]
+        print(validTokens)
+        self.tokenizer.add_keywords_from_list(validTokens)
 
 
 class Language(object):

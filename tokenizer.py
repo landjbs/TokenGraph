@@ -29,7 +29,7 @@ class Tokenizer(object):
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
         self.SPACE = re.compile(r'[\t\n\s_.?!:;/<>*&^%$#@()"~`+-]+')
 
-    # disc methods
+    # save/load methods
     # def save(self, path):
     #     """ Saves Tokenizer() to file at path """
     #     with open(path, 'w+') as :
@@ -103,6 +103,7 @@ class Tokenizer(object):
                             calc_docFreq(tokenAppearances[token]))
                     for token, rawCount in tokenCounts.items()}
         self.freqDict = freqDict
+        self.vocabSize = len(freqDict)
         return True
 
     def filter_freq_dict(self, minFreq=0, maxFreq=1, tokenNum=50000):
@@ -113,6 +114,7 @@ class Tokenizer(object):
                             in enumerate(self.freqDict.items())
                             if (qualifies(freqTup) and (i < tokenNum))}
         self.freqDict = filteredFreqDict
+        self.vocabSize = len(filteredFreqDict)
         return True
 
     # methods for tokenizer modification
@@ -121,6 +123,10 @@ class Tokenizer(object):
         assert (self.freqDict), f'freqDict must be built before tokenizer.'
         self.tokenizer.add_keywords_from_dict(self.freqDict)
         return True
+
+    # methods for idx modification
+    def build_idx(self):
+        """ Builds idx dict from freq dict """
 
 
 class _Tokenizer(object):

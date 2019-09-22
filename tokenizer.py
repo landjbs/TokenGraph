@@ -31,6 +31,14 @@ class Tokenizer(object):
     def tokenize(self, text):
         return text.split()
 
+    def _wiki_iterator(name='data/inData/wikiArticles.csv'):
+        """ Iterates over wiki csv, yielding raw article text """
+        with open(name, 'r') as wikiFile:
+            for line in wikiFile:
+                commaLoc = line.find(',')
+                articleText = line[commaLoc+3:-3]
+                yield articleText
+
     def clean_text(self, rawString):
         """
         Cleans rawString by replacing spaceMatcher and tagMatcher with a single

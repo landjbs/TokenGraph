@@ -155,7 +155,9 @@ class Tokenizer(object):
         """ Returns Counter() of recognized tokens in raw text """
         return Counter(self.tokenizer.extract_keywords(self.clean(text)))
 
-
+    # mechanical token ranking in text
+    def mechanically_rank_tokens(self, text):
+        
 
 
 class _Tokenizer(object):

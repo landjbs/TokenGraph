@@ -1,9 +1,7 @@
-from tokenizer import Tokenizer
 
-x = Tokenizer()
-
-x.freqDict = {'the':(1)}
-
-x.build_tokenizer(10,-1, 1)
-
-print(x.tokenizer)
+def wiki_iterator():
+    with open('data/inData/wikiArticles.csv', 'r') as wikiFile:
+        for line in wikiFile:
+            commaLoc = line.find(',')
+            articleText = line[commaLoc+3:-3]
+            yield articleText

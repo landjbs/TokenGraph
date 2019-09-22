@@ -84,7 +84,7 @@ class Tokenizer(object):
         # lambdas for calculating termFreq and docFreq
         calc_termFreq = lambda tokenCount : tokenCount / totalLength
         calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
-        # use total num to normalize tokenCounts and find frequency for each token
+        # use total num to norm tokenCounts and find frequency for each token
         freqDict = {token: (calc_termFreq(tokenCounts[token]),
                             calc_docFreq(tokenAppearances[token]))
                     for token in tokenCounts}
@@ -127,7 +127,7 @@ class Language(object):
         knowledgeProcessor for token extraction.
         Returns: dict mapping knowledge tokens to tuple of (termFreq, docFreq)
         observed in documents.
-            termFreq = (number of times a token is used) / (number of words used)
+            termFreq = (number of times token is used) / (number of words used)
             docFreq = log ((num of documents) / (num of documents with token))
         """
         # initialize counter to map knowledge tokens to raw number of occurences
@@ -145,7 +145,7 @@ class Language(object):
                 text = FileObj.read()
                 # find both greedy and subtokens in text
                 tokensFound = list(knowledgeFinder.find_rawTokens(text,
-                                                                knowledgeProcessor))
+                                                            knowledgeProcessor))
                 # add tokens counts to tokenCounts counter
                 tokenCounts.update(tokensFound)
                 # add single appearance for each token found

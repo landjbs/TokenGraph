@@ -92,6 +92,12 @@ class Tokenizer(object):
         # lambdas for calculating termFreq and docFreq
         calc_termFreq = lambda tokenCount : tokenCount / totalLength
         calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
+        # use total num to norm tokenCounts and find frequency for each token
+        freqDict = {token : (calc_termFreq(rawCount),
+                            calc_docFreq(tokenAppearances[token])),
+                    for token, rawCount in tokenCounts.items()}
+        self.freqDict = freqDict
+        return True
 
 
 

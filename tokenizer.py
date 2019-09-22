@@ -32,9 +32,9 @@ class Tokenizer(object):
     def __str__(self):
         return f'<Tokenizer Object: VOCAB_SIZE={vocabSize} | LOWER={lower}>'
 
-    def _wiki_iterator(name='data/inData/wikiArticles.csv'):
+    def _wiki_iterator(path='data/inData/wikiArticles.csv'):
         """ Iterates over wiki csv, yielding raw article text """
-        with open(name, 'r') as wikiFile:
+        with open(path, 'r') as wikiFile:
             for line in wikiFile:
                 commaLoc = line.find(',')
                 articleText = line[commaLoc+3:-3]
@@ -57,20 +57,59 @@ class Tokenizer(object):
         spacedString = re.sub(self.SPACE, " ", cleanedString)
         # lowercase the alpha chars that remain
         if self.lower:
-            return self._to_lower(spacedString)
+            return self.to_lower(spacedString)
         else:
             return spacedString
 
     # methods for gathering language data
-    def freq_dict_from_wiki_file():
+    def freq_dict_from_wiki_file(self, path):
         """ Builds freq dict from wiki iterator """
+        # initialize counter to map tokens to raw number of occurences
+        tokenCounts = Counter()
+        # initialize counter to map tokens to number of docs they appear in
+        tokenAppearances = Counter()
+        # initialize variable to count total number of words used
+        totalLength = 0
+        # iterate over wiki file
+        for article in self.wiki_iterator(path)
+
+    def build_freq_dict_from_folder(self, folderPath):
+        """ """
+        # initialize counter to map tokens to raw number of occurences
+        tokenCounts = Counter()
+        # initialize counter to map tokens to number of docs they appear in
+        tokenAppearances = Counter()
+        # initialize variable to count total number of words used
+        totalLength = 0
+        # find and iterate over list of files within folderPath
+        for i, file in enumerate(tqdm(listdir(folderPath))):
+            with open(f"{folderPath}/{file}") as FileObj:
+                # read in the current file
+                text = FileObj.read()
+                # find tokens in text
+                tokensFound, tokenNum = self.clean_and_tokenize(text,
+                                                            returnCounts=True)
+                # add tokens counts to tokenCounts counter
+                tokenCounts.update(tokensFound)
+                # add single appearance for each token found
+                tokenAppearances.update(set(tokensFound))
+                # add number of words in current file to totalLength
+                totalLength += tokenNum
+        # lambdas for calculating termFreq and docFreq
+        calc_termFreq = lambda tokenCount : tokenCount / totalLength
+        calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
+        # use total num to norm tokenCounts and find frequency for each token
+        freqDict = {token: (calc_termFreq(tokenCounts[token]),
+                            calc_docFreq(tokenAppearances[token]))
+                    for token in tokenCounts}
+        self.freqDict = freqDict
+        return True
 
 
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
     def __init__(self, lower=True):
-        """ """
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
         self.lower = lower
@@ -107,7 +146,7 @@ class Tokenizer(object):
         spacedString = re.sub(self.SPACE, " ", cleanedString)
         # lowercase the alpha chars that remain
         if self.lower:
-            return self._to_lower(spacedString)
+            return self.to_lower(spacedString)
         else:
             return spacedString
 

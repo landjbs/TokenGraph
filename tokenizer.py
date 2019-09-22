@@ -36,7 +36,8 @@ class Tokenizer(object):
 
     # misc methods
     def __str__(self):
-        return f'<Tokenizer Object: VOCAB_SIZE={vocabSize} | LOWER={lower}>'
+        return (f'<Tokenizer Object: VOCAB_SIZE={self.vocabSize} | ' \
+                f'LOWER={self.lower}>')
 
     def wiki_iterator(self, path='data/inData/wikiArticles.csv'):
         """ Iterates over wiki csv, yielding raw article text """
@@ -124,7 +125,7 @@ class Tokenizer(object):
     def build_tokenizer(self):
         """ Builds flashtext tokenizer from freq dict """
         assert (self.freqDict), f'freqDict must be built before tokenizer.'
-        self.tokenizer.add_keywords_from_dict(self.freqDict)
+        self.tokenizer.add_keywords_from_list(list(self.freqDict.keys()))
         return True
 
     # methods for idx modification
@@ -148,6 +149,8 @@ class Tokenizer(object):
         self.build_idx()
         self.build_reverse_idx()
         return True
+
+
 
 
 

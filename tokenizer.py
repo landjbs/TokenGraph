@@ -37,7 +37,7 @@ class Tokenizer(object):
     def __str__(self):
         return f'<Tokenizer Object: VOCAB_SIZE={vocabSize} | LOWER={lower}>'
 
-    def _wiki_iterator(path='data/inData/wikiArticles.csv'):
+    def wiki_iterator(self, path='data/inData/wikiArticles.csv'):
         """ Iterates over wiki csv, yielding raw article text """
         with open(path, 'r') as wikiFile:
             for line in wikiFile:
@@ -67,7 +67,7 @@ class Tokenizer(object):
             return spacedString
 
     # methods for gathering language data
-    def freq_dict_from_wiki_file(self, path):
+    def freq_dict_from_wiki_file(self):
         """ Builds freq dict from wiki iterator """
         # initialize counter to map tokens to raw number of occurences
         tokenCounts = Counter()
@@ -75,8 +75,10 @@ class Tokenizer(object):
         tokenAppearances = Counter()
         # initialize variable to count total number of words used
         totalLength = 0
+        # get base count of article num for tqdm
+        articleCount = len([None for _ in self.wiki_iterator()])
         # iterate over wiki file
-        for text in self.wiki_iterator(path):
+        for text in tqdm(self.wiki_iterator(), total=articleCount):
             # find tokens in text
             tokenList = text.split()
             # count number of times each token appears
@@ -94,15 +96,16 @@ class Tokenizer(object):
         calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
         # use total num to norm tokenCounts and find frequency for each token
         freqDict = {token : (calc_termFreq(rawCount),
-                            calc_docFreq(tokenAppearances[token])),
+                            calc_docFreq(tokenAppearances[token]))
                     for token, rawCount in tokenCounts.items()}
         self.freqDict = freqDict
         return True
 
+    def 
 
 
 
-class Tokenizer(object):
+class _Tokenizer(object):
     """ Stores all methods for working with text """
     def __init__(self, lower=True):
         assert isinstance(lower, bool), ('lower expected type bool, but found '

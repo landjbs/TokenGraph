@@ -150,6 +150,10 @@ class Tokenizer(object):
         self.build_reverse_idx()
         return True
 
+    # tokenization methods
+    def clean_and_tokenize(self, text):
+        """ Returns Counter() of recognized tokens in raw text """
+        return Counter(self.tokenizer.extract_keywords(self.clean(text)))
 
 
 

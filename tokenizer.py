@@ -11,6 +11,23 @@ from collections import Counter
 from flashtext import KeywordProcessor
 
 
+
+class Tokenizer(object):
+    """ Stores all methods for working with text """
+    def __init__(self, lower=True):
+        assert isinstance(lower, bool), ('lower expected type bool, but found '
+                                        f'type {type(lower)}.')
+        self.lower = lower
+        self.vocabSize  =   None
+        self.freqDict   =   None
+        self.idx        =   None
+        self.reverseIdx =   None
+        self.tokenizer  = KeywordProcessor()
+        # matches non-alphanumeric, space, or sentence-ending punctuation
+        self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
+        # matches sequence of tabs, newlines, spaces, underscores, and dashes
+        self.SPACE = re.compile(r'[\t\n\s_.?!:;/<>*&^%$#@()"~`+-]+')
+
 class Tokenizer(object):
     """ Stores all methods for working with text """
     def __init__(self, lower=True):
@@ -144,7 +161,6 @@ class Language(object):
         tokenAppearances = Counter()
         # initialize variable to count total number of words used
         totalLength = 0
-
         # find and iterate over list of files within folderPath
         for i, file in enumerate(os.listdir(folderPath)):
             print(f"\tBuilding freqDict: {i}", end='\r')
@@ -174,6 +190,9 @@ class Language(object):
         if outPath:
             save(freqDict, outPath)
         return freqDict
+
+    def freqDict_from_wikiCsv(self):
+        """ Builds freq dict  """
 
     def vocab_freqs_from_string(self, textString):
         self.vocabFreqs = tokenizer.clean_and_tokenize(textString)

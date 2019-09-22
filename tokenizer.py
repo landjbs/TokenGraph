@@ -107,7 +107,10 @@ class Tokenizer(object):
         return True
 
     def filter_freq_dict(self, minFreq=0, maxFreq=1, tokenNum=50000):
-        """ Filters freq dict to tokenNum tokens between min and maxFreq """
+        """
+        Filters freq dict to tokenNum tokens between min and maxFreq. Updates
+        tokenizer, idx and reverse idx in conjunction.
+        """
         qualifies = lambda freqTup : (maxFreq > freqTup[0] > minFreq)
         filteredFreqDict = {token : freqTup
                             for i, (token, freqTup)

@@ -14,7 +14,6 @@ from collections import Counter
 from flashtext import KeywordProcessor
 
 
-
 class Tokenizer(object):
     """ Stores all methods for working with text """
     def __init__(self, lower=True):
@@ -83,7 +82,6 @@ class Tokenizer(object):
         self.vocabSize = len(self.freqDict)
         self.initialized = True
         return True
-
 
     # misc methods
     def __str__(self):

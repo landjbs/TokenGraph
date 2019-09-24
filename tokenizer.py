@@ -90,6 +90,7 @@ class Tokenizer(object):
         return (f'<Tokenizer Object: VOCAB_SIZE={self.vocabSize} | ' \
                 f'LOWER={self.lower}>')
 
+    # common file iterators
     def wiki_iterator(self, path='data/inData/wikiArticles.csv'):
         """ Iterates over wiki csv, yielding raw article text """
         with open(path, 'r') as wikiFile:
@@ -209,3 +210,4 @@ class Tokenizer(object):
     def mechanically_rank_tokens(self, text, subScores):
         """ Ranks tokenes according to freqDict and observed freq in text """
         observedTokenCounts = self.clean_and_tokenize(test)
+        

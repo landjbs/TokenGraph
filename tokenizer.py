@@ -207,32 +207,43 @@ class Tokenizer(object):
         return Counter(self.tokenizer.extract_keywords(self.clean(text)))
 
     # mechanical token ranking in text
-    def KNOWLEDGE_mechanically_rank_tokens(self, text, maxChunkSize=5):
-        """ Ranks tokenes according to freqDict and observed freq in text """
-        # find counter of greedy tokens in text
-        greedyTokens = self.clean_and_tokenize(test)
-        subTokens = Counter()
-        # iterate over greedy counter
-        for greedyToken, greedyCount in greedyTokens.items():
-            greedyWords = greedyToken.split()
-            wordNum = len(greedyWords)
-            # if multiple words in cur topToken, recursively look for sub tokens
-            if wordNum > 1:
-                # init chunk is 1 smaller than wordNum but capped at maxChunkSize
-                chunkSize = min(maxChunkSize, (wordNum - 1))
-                # iterate over greedy tokens, analyzing smaller chunks at a time
-                while chunkSize > 0:
-                    for i in range(wordNum):
-                        chunkWords = greedyWords[i : i+chunkSize]
-                        textChunk = ' '.join(chunkWords)
-                        # if the chunk is a token in the tokenizer,
-                        # add its count tokenCounts after norming by fraction
-                        # of larger token and multiplying by larger token's count
-                        # (becuase you're iterating over a set)
-                        if textChunk in knowledgeProcessor:
-                            subTokens.update({textChunk :
-                                                (greedyCount * (len(chunkWords)
-                                                                / wordNum))})
-                    chunkSize -= 1
-        greedyTokens.update(subTokens)
-        return greedyTokens
+    def rank_single_token(self, token, )
+
+    def single_mechanically_rank_tokens(self, text):
+        """
+        Ranks token scores in text using freqDict and assuming no subtokens
+        """
+        tokenCounts = self.clean_and_tokenize(text)
+        wordNum = len(text.split())
+
+
+
+    # def KNOWLEDGE_mechanically_rank_tokens(self, text, maxChunkSize=5):
+    #     """ Ranks tokenes according to freqDict and observed freq in text """
+    #     # find counter of greedy tokens in text
+    #     greedyTokens = self.clean_and_tokenize(test)
+    #     subTokens = Counter()
+    #     # iterate over greedy counter
+    #     for greedyToken, greedyCount in greedyTokens.items():
+    #         greedyWords = greedyToken.split()
+    #         wordNum = len(greedyWords)
+    #         # if multiple words in cur topToken, recursively look for sub tokens
+    #         if wordNum > 1:
+    #             # init chunk is 1 smaller than wordNum but capped at maxChunkSize
+    #             chunkSize = min(maxChunkSize, (wordNum - 1))
+    #             # iterate over greedy tokens, analyzing smaller chunks at a time
+    #             while chunkSize > 0:
+    #                 for i in range(wordNum):
+    #                     chunkWords = greedyWords[i : i+chunkSize]
+    #                     textChunk = ' '.join(chunkWords)
+    #                     # if the chunk is a token in the tokenizer,
+    #                     # add its count tokenCounts after norming by fraction
+    #                     # of larger token and multiplying by larger token's count
+    #                     # (becuase you're iterating over a set)
+    #                     if textChunk in knowledgeProcessor:
+    #                         subTokens.update({textChunk :
+    #                                             (greedyCount * (len(chunkWords)
+    #                                                             / wordNum))})
+    #                 chunkSize -= 1
+    #     greedyTokens.update(subTokens)
+    #     return greedyTokens

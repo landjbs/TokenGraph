@@ -63,6 +63,16 @@ class Tokenizer(object):
                 obj = pickle.load(loadFile)
             return obj
 
+        self.freqDict = read_attribute('freqDict')
+        self.idx = read_attribute('idx')
+        self.tokenizer = read_attribute('tokenizer')
+        self.lower = read_attribute
+        self.build_reverse_idx()
+        self.vocabSize = len(self.freqDict)
+        self.initialized = True
+        return True
+
+
     # misc methods
     def __str__(self):
         return (f'<Tokenizer Object: VOCAB_SIZE={self.vocabSize} | ' \

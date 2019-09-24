@@ -36,8 +36,8 @@ class Tokenizer(object):
     # save/load methods
     def save(self, path):
         """ Saves Tokenizer() to file at path """
+        assert self.initialized, 'Tokenizer must be initialized before saving.'
         mkdir(path)
-        assert self.freqDict, 'freqDict must be instantiated before'
 
     # misc methods
     def __str__(self):

@@ -7,6 +7,7 @@ import re
 import pickle
 from numpy import log
 from tqdm import tqdm
+from os.path import exists
 from os import listdir, mkdir
 from unidecode import unidecode
 from collections import Counter
@@ -37,36 +38,47 @@ class Tokenizer(object):
     def save(self, path):
         """ Saves Tokenizer() to folder at path """
         assert self.initialized, 'Tokenizer must be initialized before saving.'
+        assert not exists(path), (f'Folder {path} already exists. Try deleting'\
+                                ' it or saving Tokenizer to different path.')
         mkdir(path)
 
         def save_attribute(obj, name):
             """ Helper saves attribute to file under path """
-            with open(f'{path}/{name}.sav', 'w+') as attributeFile:
+            with open(f'{path}/{name}.sav', 'wb+') as attributeFile:
                 pickle.dump(obj, attributeFile)
+            return True
 
         # save neccessary attributes for loss-less reconstruction
-        save_attribute(self.freqDict, 'freqDict')
+        f = self.freqDict
+        save_attribute(f, 'freqDict')
         save_attribute(self.idx, 'idx')
         save_attribute(self.tokenizer, 'tokenizer')
         with open(f'{path}/lower.sav', 'w+') as lowerFile:
-            lowerFile.write(self.lower)
+            lowerStr = 't' if self.lower else 'f'
+            lowerFile.write(lowerStr)
         return True
 
     def load(self, path):
         """ Loads Tokenizer() from folder at path """
+        assert exists(path), f'Folder {path} cannot be found.'
         assert not self.initialized, ("Tokenizer file can't be loaded into an "\
                                         "initialized Tokenizer.")
 
         def read_attribute(name):
             """ Helper reads attribute from file under path """
-            with open(f'{path}/{name}.sav') as loadFile:
+            with open(f'{path}/{name}.sav', 'rb') as loadFile:
                 obj = pickle.load(loadFile)
             return obj
 
+        # load pickled objects
         self.freqDict = read_attribute('freqDict')
         self.idx = read_attribute('idx')
         self.tokenizer = read_attribute('tokenizer')
-        self.lower = read_attribute()
+        # load lower bool
+        with open(f'{path}/lower.sav', 'r') as lowerFile:
+            lowerStr = lowerFile.read()
+        self.lower = True if (lowerStr=='t') else False
+        # extrapolate from loaded objects
         self.build_reverse_idx()
         self.vocabSize = len(self.freqDict)
         self.initialized = True

@@ -6,7 +6,7 @@ Language() class for storing metrics about the language used.
 import re
 from numpy import log
 from tqdm import tqdm
-from os import listdir
+from os import listdir, mkdir
 from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
@@ -30,9 +30,10 @@ class Tokenizer(object):
         self.SPACE = re.compile(r'[\t\n\s_.?!:;/<>*&^%$#@()"~`+-]+')
 
     # save/load methods
-    # def save(self, path):
-    #     """ Saves Tokenizer() to file at path """
-    #     with open(path, 'w+') as :
+    def save(self, path):
+        """ Saves Tokenizer() to file at path """
+        mkdir(path)
+        
 
     # misc methods
     def __str__(self):
@@ -157,7 +158,7 @@ class Tokenizer(object):
 
     # mechanical token ranking in text
     def mechanically_rank_tokens(self, text):
-        
+
 
 
 class _Tokenizer(object):

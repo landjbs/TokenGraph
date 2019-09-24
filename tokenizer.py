@@ -16,6 +16,7 @@ from flashtext import KeywordProcessor
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
+    # base methods
     def __init__(self, lower=True):
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
@@ -32,6 +33,10 @@ class Tokenizer(object):
         self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
         self.SPACE = re.compile(r'[\t\n\s_.?!:;/<>*&^%$#@()"~`+-]+')
+
+    def __str__(self):
+        return (f'<Tokenizer Object: VOCAB_SIZE={self.vocabSize} | ' \
+                f'LOWER={self.lower}>')
 
     # save/load methods
     def save(self, path):
@@ -82,11 +87,6 @@ class Tokenizer(object):
         self.vocabSize = len(self.freqDict)
         self.initialized = True
         return True
-
-    # misc methods
-    def __str__(self):
-        return (f'<Tokenizer Object: VOCAB_SIZE={self.vocabSize} | ' \
-                f'LOWER={self.lower}>')
 
     # common file iterators
     def wiki_iterator(self, path='data/inData/wikiArticles.csv'):

@@ -66,7 +66,7 @@ class Tokenizer(object):
         self.freqDict = read_attribute('freqDict')
         self.idx = read_attribute('idx')
         self.tokenizer = read_attribute('tokenizer')
-        self.lower = read_attribute
+        self.lower = read_attribute()
         self.build_reverse_idx()
         self.vocabSize = len(self.freqDict)
         self.initialized = True

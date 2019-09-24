@@ -5,6 +5,7 @@ relationships between tokens
 
 import numpy as np
 from tqdm import tqdm
+from operator import itemgetter
 
 
 class TokenGraph(object):
@@ -40,7 +41,9 @@ class TokenGraph(object):
         # get base count of texts in iterator for tqdm
         textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator
-        for text in tqdm(iterator(), total=textCount):
+        for i, text in enumerate(tqdm(iterator(), total=textCount)):
+            if i > 10:
+                break
             # get mechanical scores of tokens in text
             tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
             # cast token names to token idx nums
@@ -51,5 +54,20 @@ class TokenGraph(object):
                 for relId, relScore in idScores.items():
                     corrMatrix[id, relId] += (score * relScore)
         self.corrMatrix = corrMatrix
-        print(sum(sum(corrMatrix)))
         return True
+
+    def search_related_tokens(self, text, n=5):
+        """ Finds tokens in text and returns top n related tokens """
+        is_positive = lambda score : score > 0
+        tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
+        idScores = {self.tokenizer.idx[token] : score
+                    for token, score in tokenScores.items()}
+        for id in idScores:
+            relatedTokens = [(relId, score) for relId, score
+                            in enumerate(self.corrMatrix[id])
+                            if is_positive(score)]
+            relatedTokens.sort(reverse=True, key=itemgetter(1))
+            topTokens = relatedTokens[:n]
+            print(f'{"-"*80}\n{id}')
+            for relToken in topTokens:
+                print(f'<{relToken[1]}> {self.tokenizer.reverseIdx[relToken[0]]}')

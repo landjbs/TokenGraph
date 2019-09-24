@@ -128,7 +128,7 @@ class Tokenizer(object):
         # initialize variable to count total number of words used
         totalLength = 0
         # get base count of article num for tqdm
-        articleCount = len([None for _ in iterator])
+        articleCount = len([None for _ in iterator()])
         # iterate over wiki file
         for i, text in enumerate(tqdm(iterator(), total=articleCount)):
             # find tokens in text

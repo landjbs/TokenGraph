@@ -1,13 +1,10 @@
 from tokenizer import Tokenizer
+from tokengraph import TokenGraph
 
 x = Tokenizer()
 
-# x.language_from_wiki_file(minFreq=0, maxFreq=1, tokenNum=10000)
-
 x.load('data/outData/10000_token_test')
 
-print(x)
+z = TokenGraph(x)
 
-while True:
-    t = input('t: ')
-    print(x.single_mechanically_score_tokens(t))
+z.build_corr_matrix_from_iterator(x.wiki_iterator)

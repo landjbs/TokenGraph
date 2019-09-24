@@ -11,9 +11,10 @@ class TokenGraph(object):
     """ Stores all methods for building and accessing token relationships """
     # base methods
     def __init__(self, tokenizer):
-        assert isinstance(tokenizer, Tokenizer), ('tokenizer expected type ' \
-                                                'Tokenizer, but found type ' \
-                                                f'{type(tokenizer)}.')
+        # FIXME: Tokenizer assertion
+        # assert isinstance(tokenizer, tokenizer), ('tokenizer ' \
+        #                         ' expected type Tokenizer, but found type ' \
+        #                         f'{type(tokenizer)}.')
         assert tokenizer.initialized, ('tokenizer must be initialized before ' \
                                         'being passed to TokenGraph.')
         self.tokenizer = tokenizer
@@ -37,10 +38,18 @@ class TokenGraph(object):
         # initialize matrix to store token-token correlations
         corrMatrix = np.zeros(shape=(vocabSize, vocabSize))
         # get base count of texts in iterator for tqdm
-        textCount = len([None for _ in iterator])
+        textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator
-        for text in tqdm(iterator, total=textCount):
-            tokenScores = tokenizer.single_mechanically_score_tokens(text)
+        for text in tqdm(iterator(), total=textCount):
+            # get mechanical scores of tokens in text
+            tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
+            # cast token names to token idx nums
+            idScores = {idxDict[token] : score
+                        for token, score in tokenScores.items()}
             # iterate over observed tokens, updating correlations
-            for token, score in tokenScores.items():
-                
+            for id, score in idScores.items():
+                for relId, relScore in idScores.items():
+                    corrMatrix[id, relId] += (score * relScore)
+        self.corrMatrix = corrMatrix
+        print(sum(sum(corrMatrix)))
+        return True

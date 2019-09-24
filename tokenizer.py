@@ -39,6 +39,20 @@ class Tokenizer(object):
         assert self.initialized, 'Tokenizer must be initialized before saving.'
         mkdir(path)
 
+        def save_attribute(obj, name):
+            """ Helper saves attribute to file under path """
+            with open(f'{path}/{name}.sav', 'w+') as attributeFile:
+                pickle.dump(obj, attributeFile)
+
+        # save neccessary attributes for loss-less reconstruction
+        save_attribute(self.freqDict, 'freqDict')
+        save_attribute(self.idx, 'idx')
+        save_attribute(self.tokenizer, 'tokenizer')
+        with open(f'{path}/lower.sav', 'w+') as lowerFile:
+            lowerFile.write(self.lower)
+        return True
+
+
     # misc methods
     def __str__(self):
         return (f'<Tokenizer Object: VOCAB_SIZE={self.vocabSize} | ' \

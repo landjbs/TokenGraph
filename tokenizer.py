@@ -132,8 +132,6 @@ class Tokenizer(object):
         articleCount = len([None for _ in self.wiki_iterator()])
         # iterate over wiki file
         for i, text in enumerate(tqdm(self.wiki_iterator(), total=articleCount)):
-            if i > 1000:
-                break
             # find tokens in text
             cleanText = self.clean(text)
             tokenList = cleanText.split()
@@ -208,88 +206,6 @@ class Tokenizer(object):
         return Counter(self.tokenizer.extract_keywords(self.clean(text)))
 
     # mechanical token ranking in text
-    # def mechanically_rank_tokens(self, text):
-
-
-
-
-class Language(object):
-    """ Defines properties of the Language being delt with """
-    def __init__(self, name, tokenizer, vocabSet=None):
-        assert isinstance(tokenizer, Tokenizer), ('tokenizer expected type'
-                                                'Tokenizer() but found type'
-                                                f'{type(tokenizer)}')
-        assert (isinstance(vocabFreqs, None)
-                or isinstance(vocabFreqs, dict)), ('vocabFreqs expected either'
-                                                    'dict or None, but found'
-                                                    f'type {type(vocabFreqs)}.')
-        self.name = name
-        self.tokenizer = tokenizer
-        self.vocabSet = vocabSet
-        self.vocabSize = len(vocabSet) if vocabSet else None
-        self.idx = None
-        self.reverseIdx = None
-
-
-    def fredDict_from_folderPath(folderPath, knowledgeProcessor, outPath=None):
-        """
-        Args: folderPath to folder containing files from which to read,
-        knowledgeProcessor for token extraction.
-        Returns: dict mapping knowledge tokens to tuple of (termFreq, docFreq)
-        observed in documents.
-            termFreq = (number of times token is used) / (number of words used)
-            docFreq = log ((num of documents) / (num of documents with token))
-        """
-        # initialize counter to map knowledge tokens to raw number of occurences
-        tokenCounts = Counter()
-        # initialize counter to map knowledge tokens to number of docs they appear in
-        tokenAppearances = Counter()
-        # initialize variable to count total number of words used
-        totalLength = 0
-        # find and iterate over list of files within folderPath
-        for i, file in enumerate(os.listdir(folderPath)):
-            print(f"\tBuilding freqDict: {i}", end='\r')
-            with open(f"{folderPath}/{file}") as FileObj:
-                # read in the current file
-                text = FileObj.read()
-                # find both greedy and subtokens in text
-                tokensFound = list(knowledgeFinder.find_rawTokens(text,
-                                                            knowledgeProcessor))
-                # add tokens counts to tokenCounts counter
-                tokenCounts.update(tokensFound)
-                # add single appearance for each token found
-                tokenAppearances.update(set(tokensFound))
-                # find number of words in the current file
-                textLen = len(text.split())
-                # add number of words in current file to totalLength
-                totalLength += textLen
-
-        # lambdas for calculating termFreq and docFreq
-        calc_termFreq = lambda tokenCount : tokenCount / totalLength
-        calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
-
-        # use total num to normalize tokenCounts and find frequency for each token
-        freqDict = {token: (calc_termFreq(tokenCounts[token]),
-                            calc_docFreq(tokenAppearances[token]))
-                    for token in tokenCounts}
-        if outPath:
-            save(freqDict, outPath)
-        return freqDict
-
-    def freqDict_from_wikiCsv(self):
-        """ Builds freq dict  """
-
-    def vocab_freqs_from_string(self, textString):
-        self.vocabFreqs = tokenizer.clean_and_tokenize(textString)
-
-    def build_idx(self):
-        if self.vocabFreqs:
-            self.idx = {word : i for i, word in enumerate(vocabFreqs)}
-        else:
-            raise ValueError('Vocab Set has not yet been initialized.')
-
-    def build_reverse_idx(self):
-        if self.idx:
-            self.reverseIdx = {i : word for word, i in self.idx.items()}
-        else:
-            raise ValueError('Idx has not yet been initialized.')
+    def mechanically_rank_tokens(self, text):
+        """ Ranks tokenes according to freqDict and observed freq in text """
+        observedTokenCounts = self.clean_and_tokenize(test)

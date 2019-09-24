@@ -35,7 +35,7 @@ class Tokenizer(object):
 
     # save/load methods
     def save(self, path):
-        """ Saves Tokenizer() to file at path """
+        """ Saves Tokenizer() to folder at path """
         assert self.initialized, 'Tokenizer must be initialized before saving.'
         mkdir(path)
 
@@ -52,6 +52,16 @@ class Tokenizer(object):
             lowerFile.write(self.lower)
         return True
 
+    def load(self, path):
+        """ Loads Tokenizer() from folder at path """
+        assert not self.initialized, ("Tokenizer file can't be loaded into an "\
+                                        "initialized Tokenizer.")
+
+        def read_attribute(name):
+            """ Helper reads attribute from file under path """
+            with open(f'{path}/{name}.sav') as loadFile:
+                obj = pickle.load(loadFile)
+            return obj
 
     # misc methods
     def __str__(self):

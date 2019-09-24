@@ -120,8 +120,8 @@ class Tokenizer(object):
             return spacedString
 
     # methods for gathering language data
-    def freq_dict_from_wiki_file(self):
-        """ Builds freq dict from wiki iterator. Updates vocabSize """
+    def freq_dict_from_file_iterator(self, iterator=self.wiki_iterator):
+        """ Builds freq dict from file iterator. Updates vocabSize """
         # initialize counter to map tokens to raw number of occurences
         tokenCounts = Counter()
         # initialize counter to map tokens to number of docs they appear in
@@ -129,9 +129,9 @@ class Tokenizer(object):
         # initialize variable to count total number of words used
         totalLength = 0
         # get base count of article num for tqdm
-        articleCount = len([None for _ in self.wiki_iterator()])
+        articleCount = len([None for _ in iterator])
         # iterate over wiki file
-        for i, text in enumerate(tqdm(self.wiki_iterator(), total=articleCount)):
+        for i, text in enumerate(tqdm(iterator(), total=articleCount)):
             # find tokens in text
             cleanText = self.clean(text)
             tokenList = cleanText.split()
@@ -206,6 +206,6 @@ class Tokenizer(object):
         return Counter(self.tokenizer.extract_keywords(self.clean(text)))
 
     # mechanical token ranking in text
-    def mechanically_rank_tokens(self, text):
+    def mechanically_rank_tokens(self, text, subScores):
         """ Ranks tokenes according to freqDict and observed freq in text """
         observedTokenCounts = self.clean_and_tokenize(test)

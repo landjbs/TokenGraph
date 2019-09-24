@@ -12,6 +12,8 @@ class TokenGraph(object):
         assert isinstance(tokenizer, Tokenizer), ('tokenizer expected type ' \
                                                 'Tokenizer, but found type ' \
                                                 f'{type(tokenizer)}.')
+        assert tokenizer.initialized, ('tokenizer must be initialized before ' \
+                                        'being passed to TokenGraph.')
         self.tokenizer = tokenizer
         self.corrMatrix = None
 
@@ -23,4 +25,16 @@ class TokenGraph(object):
 
     # matrix initialization methods
     def build_corr_matrix_from_iterator(self, iterator):
-        """ Builds corr matrix from file iterator """
+        """
+        Builds corr matrix from file iterator using mechanical scores from
+        tokenizer
+        """
+        # cache vars from tokenizer
+        vocabSize = self.tokenizer.vocabSize
+        idxDict = self.tokenizer.idx
+        # initialize matrix to store token-token correlations
+        corrMatrix = np.zeros(shape=(vocabSize, vocabSize))
+        # get base count of texts in iterator for tqdm
+        textCount = len([None for _ in iterator])
+        # iterate over texts returned by iterator
+        for text in

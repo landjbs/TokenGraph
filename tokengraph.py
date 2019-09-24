@@ -4,6 +4,8 @@ relationships between tokens
 """
 
 import numpy as np
+from tqdm import tqdm
+
 
 class TokenGraph(object):
     """ Stores all methods for building and accessing token relationships """
@@ -37,4 +39,8 @@ class TokenGraph(object):
         # get base count of texts in iterator for tqdm
         textCount = len([None for _ in iterator])
         # iterate over texts returned by iterator
-        for text in
+        for text in tqdm(iterator, total=textCount):
+            tokenScores = tokenizer.single_mechanically_score_tokens(text)
+            # iterate over observed tokens, updating correlations
+            for token, score in tokenScores.items():
+                

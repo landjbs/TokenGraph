@@ -4,6 +4,7 @@ Language() class for storing metrics about the language used.
 """
 
 import re
+import pickle
 from numpy import log
 from tqdm import tqdm
 from os import listdir, mkdir
@@ -19,11 +20,14 @@ class Tokenizer(object):
         assert isinstance(lower, bool), ('lower expected type bool, but found '
                                         f'type {type(lower)}.')
         self.lower = lower
+        # low level attributes to be abstracted
         self.vocabSize  =   0
         self.freqDict   =   None
         self.idx        =   None
         self.reverseIdx =   None
         self.tokenizer  = KeywordProcessor()
+        # high level attribute to indicate initialization
+        self.initialized = False
         # matches non-alphanumeric, space, or sentence-ending punctuation
         self.STRIP = re.compile(r'[^0-9a-zA-Z\t\n\s_.?!:;/<>*&^%$#@()"~`+-]')
         # matches sequence of tabs, newlines, spaces, underscores, and dashes
@@ -33,7 +37,7 @@ class Tokenizer(object):
     def save(self, path):
         """ Saves Tokenizer() to file at path """
         mkdir(path)
-        
+        assert self.freqDict, 'freqDict must be instantiated before'
 
     # misc methods
     def __str__(self):
@@ -149,6 +153,7 @@ class Tokenizer(object):
         self.build_tokenizer()
         self.build_idx()
         self.build_reverse_idx()
+        self.initialized = True
         return True
 
     # tokenization methods

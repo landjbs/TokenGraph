@@ -121,7 +121,7 @@ class Tokenizer(object):
             return spacedString
 
     # methods for gathering language data
-    def freq_dict_from_file_iterator(self, iterator=self.wiki_iterator):
+    def freq_dict_from_file_iterator(self, iterator):
         """ Builds freq dict from file iterator. Updates vocabSize """
         # initialize counter to map tokens to raw number of occurences
         tokenCounts = Counter()
@@ -207,18 +207,23 @@ class Tokenizer(object):
         return Counter(self.tokenizer.extract_keywords(self.clean(text)))
 
     # mechanical token ranking in text
-    def rank_single_token(self, token, )
+    def score_single_token(self, token, observedFreq):
+        """ Scores a single token in text according to observed tf """
+        normedTermFreq = observedFreq / self.freqDict[token][0]
+        normedDocFreq = 1 / self.freqDict[token][1]
+        tf_idf = normedTermFreq * normedDocFreq
+        return round(1 + log(tf_idf), ndigits=4)
 
-    def single_mechanically_rank_tokens(self, text):
+    def single_mechanically_score_tokens(self, text):
         """
         Ranks token scores in text using freqDict and assuming no subtokens
         """
         tokenCounts = self.clean_and_tokenize(text)
         wordNum = len(text.split())
+        return {token : self.score_single_token(token, (count/wordNum))
+                for token, count in tokenCounts.items()}
 
-
-
-    # def KNOWLEDGE_mechanically_rank_tokens(self, text, maxChunkSize=5):
+    # def KNOWLEDGE_mechanically_score_tokens(self, text, maxChunkSize=5):
     #     """ Ranks tokenes according to freqDict and observed freq in text """
     #     # find counter of greedy tokens in text
     #     greedyTokens = self.clean_and_tokenize(test)

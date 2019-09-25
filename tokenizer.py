@@ -207,10 +207,10 @@ class Tokenizer(object):
     # mechanical token ranking in text
     def score_single_token(self, token, observedFreq):
         """ Scores a single token in text according to observed tf """
-        normedTermFreq = observedFreq / self.freqDict[token][0]
-        normedDocFreq = 1 / self.freqDict[token][1]
-        tf_idf = normedTermFreq * normedDocFreq
-        return round(1 + log(tf_idf), ndigits=4)
+        # normedTermFreq = observedFreq / self.freqDict[token][0]
+        # normedDocFreq = 1 / self.freqDict[token][1]
+        # tf_idf = normedTermFreq * normedDocFreq
+        # return round(1 + log(tf_idf), ndigits=4)
 
     def single_mechanically_score_tokens(self, text):
         """

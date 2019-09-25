@@ -80,13 +80,6 @@ class TokenGraph(object):
             for id, score in tokenScores.items():
                 for relId, relScore in tokenScores.items():
                     corrMatrix[id, relId] += (score * relScore)
-        # TEMP: norm each row and column by the sum across the slice
-        for rowNum, row in enumerate(corrMatrix):
-            rowSum = sum(row)
-            corrMatrix[rowNum] = np.divide(row, rowSum)
-        for colNum, col in enumerate(corrMatrix[:]):
-            colSum = sum(col)
-            corrMatrix[:, colNum] = np.divide(col, colSum)
         self.corrMatrix = corrMatrix
         self.initialized = True
         return True

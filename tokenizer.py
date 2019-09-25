@@ -13,6 +13,8 @@ from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
 
+from utils import save_attribute
+
 
 class Tokenizer(object):
     """ Stores all methods for working with text """
@@ -47,12 +49,6 @@ class Tokenizer(object):
         assert not exists(path), (f'Folder {path} already exists. Try deleting'\
                                 ' it or saving Tokenizer to different path.')
         mkdir(path)
-
-        def save_attribute(obj, name):
-            """ Helper saves attribute to file under path """
-            with open(f'{path}/{name}.sav', 'wb+') as attributeFile:
-                pickle.dump(obj, attributeFile)
-            return True
 
         # save neccessary attributes for loss-less reconstruction
         f = self.freqDict

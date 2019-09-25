@@ -10,6 +10,8 @@ from os import mkdir
 from os.path import exists
 from operator import itemgetter
 
+from utils import save_attribute
+
 
 class TokenGraph(object):
     """ Stores all methods for building and accessing token relationships """
@@ -38,14 +40,16 @@ class TokenGraph(object):
                                 ' it or saving TokenizGraph to different path.')
         mkdir(path)
 
-        def save_attribute(obj, name):
-            """ Helper saves attribute to file under path """
-            with open(f'{path}/{name}.sav', 'wb+') as attributeFile:
-                pickle.dump(obj, attributeFile)
-            return True
+        np.save(f'{path}/corrMatrix', self.corrMatrix)
+        tokenizer.save(f'{path}/tokenizer')
+        return True
 
+    def load(self, path):
+        """ Loads TokenGraph() from folder at path """
+        assert exists(path), f'Folder {path} cannot be found.'
+        assert not self.initialized, ("TokenGraph file can't be loaded into "\
+                                        "initialized TokenGraph.")
 
-    # TODO: IMPLEMENT LOAD
 
 
     # matrix initialization methods

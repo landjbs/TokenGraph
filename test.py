@@ -9,6 +9,8 @@ z = TokenGraph(x)
 
 z.build_corr_matrix_from_iterator(x.wiki_iterator)
 
+print(z)
+
 while True:
     t = input('t: ')
     z.search_related_tokens(t)

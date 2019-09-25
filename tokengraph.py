@@ -42,7 +42,7 @@ class TokenGraph(object):
         textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator
         for i, text in enumerate(tqdm(iterator(), total=textCount)):
-            if i > 10:
+            if i > 1000:
                 break
             # get mechanical scores of tokens in text
             tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
@@ -66,7 +66,7 @@ class TokenGraph(object):
             relatedTokens = [(relId, score) for relId, score
                             in enumerate(self.corrMatrix[id])
                             if is_positive(score)]
-            relatedTokens.sort(reverse=True, key=itemgetter(1))
+            relatedTokens.sort(reverse=False, key=itemgetter(1))
             topTokens = relatedTokens[:n]
             print(f'{"-"*80}\n{id}')
             for relToken in topTokens:

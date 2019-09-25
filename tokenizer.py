@@ -51,8 +51,7 @@ class Tokenizer(object):
         mkdir(path)
 
         # save neccessary attributes for loss-less reconstruction
-        f = self.freqDict
-        save_attribute(f, 'freqDict')
+        save_attribute(self.freqDict, 'freqDict')
         save_attribute(self.idx, 'idx')
         save_attribute(self.tokenizer, 'tokenizer')
         with open(f'{path}/lower.sav', 'w+') as lowerFile:

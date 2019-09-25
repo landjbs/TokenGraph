@@ -24,8 +24,8 @@ class TokenGraph(object):
                                             'before being passed to ' \
                                             'TokenGraph.')
         else:
-            assert isinstance(tokenizer, None), ('tokenizer must have type ' \
-                                                'Tokenizer or None.')
+            assert not isinstance(tokenizer, bool), ('tokenizer must have type'\
+                                                    ' Tokenizer or None.')
         self.tokenizer = tokenizer
         self.corrMatrix = None
         self.initialized = False
@@ -55,7 +55,7 @@ class TokenGraph(object):
                                                         "can't be loaded into "\
                                                         'initialized '\
                                                         'TokenGraph.')
-        self.corrMatrix = np.load(f'{path}/corrMatrix')
+        self.corrMatrix = np.load(f'{path}/corrMatrix.npy')
         shellTokenizer = Tokenizer()
         self.tokenizer = shellTokenizer.load(f'{path}/tokenizer')
         self.initialized = True

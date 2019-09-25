@@ -5,6 +5,8 @@ relationships between tokens
 
 import numpy as np
 from tqdm import tqdm
+from os import mkdir
+from os.path import exists
 from operator import itemgetter
 
 
@@ -20,12 +22,22 @@ class TokenGraph(object):
                                         'being passed to TokenGraph.')
         self.tokenizer = tokenizer
         self.corrMatrix = None
+        self.initialized = False
 
     def __str__(self):
         return f'<TokenGraph Object: TOKENIZER={self.tokenizer}>'
 
     # save/load methods
-    # TODO: IMPLEMENT
+    def save(self, path):
+        """ Saves TokenGraph() to folder at path """
+        assert isinstance(path, str), ('path expected type str, but found '\
+                                        f'type {type(path)}.')
+        assert self.initialized, 'TokenGraph must be initialized before saving.'
+        assert not exists(path), (f'Folder {path} already exists. Try deleting'\
+                                ' it or saving TokenizGraph to different path.')
+        mkdir(path)
+    # TODO: IMPLEMENT LOAD
+
 
     # matrix initialization methods
     def build_corr_matrix_from_iterator(self, iterator):

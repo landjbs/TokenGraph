@@ -7,8 +7,8 @@ import re
 import pickle
 from numpy import log
 from tqdm import tqdm
+from os import mkdir
 from os.path import exists
-from os import listdir, mkdir
 from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
@@ -41,6 +41,8 @@ class Tokenizer(object):
     # save/load methods
     def save(self, path):
         """ Saves Tokenizer() to folder at path """
+        assert isinstance(path, str), ('path expected type str, but found '\
+                                        f'type {type(path)}.')
         assert self.initialized, 'Tokenizer must be initialized before saving.'
         assert not exists(path), (f'Folder {path} already exists. Try deleting'\
                                 ' it or saving Tokenizer to different path.')

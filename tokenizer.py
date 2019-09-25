@@ -7,8 +7,6 @@ import re
 import pickle
 from numpy import log
 from tqdm import tqdm
-from os import mkdir
-from os.path import exists
 from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
@@ -58,14 +56,14 @@ class Tokenizer(object):
 
     def load(self, path):
         """ Loads Tokenizer() from folder at path """
-        assert exists(path), f'Folder {path} cannot be found.'
+        utils.path_exists(path)
         assert not self.initialized, ("Tokenizer file can't be loaded into an "\
                                         "initialized Tokenizer.")
 
         # load pickled objects
-        self.freqDict = utils.load_obj('freqDict')
-        self.idx = utils.load_obj('idx')
-        self.tokenizer = utils.load_obj('tokenizer')
+        self.freqDict = utils.load_obj(f'{path}/freqDict')
+        self.idx = utils.load_obj(f'{path}/idx')
+        self.tokenizer = utils.load_obj(f'{path}/tokenizer')
         # load lower bool
         with open(f'{path}/lower.sav', 'r') as lowerFile:
             lowerStr = lowerFile.read()

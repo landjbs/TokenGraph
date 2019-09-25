@@ -6,12 +6,10 @@ relationships between tokens
 import pickle
 import numpy as np
 from tqdm import tqdm
-from os import mkdir
-from os.path import exists
 from operator import itemgetter
 
+import utils as utils
 from tokenizer import Tokenizer
-from utils import save_attribute
 
 
 class TokenGraph(object):
@@ -41,16 +39,14 @@ class TokenGraph(object):
         assert self.tokenizer, ('TokenGraph must have valid tokenizer object '\
                                 'prior to saving.')
         assert self.initialized, 'TokenGraph must be initialized before saving.'
-        assert not exists(path), (f'Folder {path} already exists. Try deleting'\
-                                ' it or saving TokenizGraph to different path.')
-        mkdir(path)
+        utils.safe_make_folder(path)
         np.save(f'{path}/corrMatrix', self.corrMatrix)
         self.tokenizer.save(f'{path}/tokenizer')
         return True
 
     def load(self, path):
         """ Loads TokenGraph() from folder at path """
-        assert exists(path), f'Folder {path} cannot be found.'
+        utils.path_exists(path)
         assert not (self.initialized or self.tokenizer), ('TokenGraph file' \
                                                         "can't be loaded into "\
                                                         'initialized '\

@@ -17,19 +17,20 @@ def load_obj(name):
 
 def path_exists(path):
     """ Asserts path existance """
-    assert os.path.exists(path), ''
-
+    assert os.path.exists(path), f'Folder {path} cannot be found.'
 
 def delete_folder(folderPath):
-    """ Deletes folderPath and contents """
+    """ Recursively eletes folderPath and contents """
     if os.path.exists(folderPath):
         for file in os.listdir(folderPath):
-            os.remove(f'{folderPath}/{file}')
+            try:
+                os.remove(f'{folderPath}/{file}')
+            except PermissionError:
+                delete_folder(f'{folderPath}/{file}')
         os.rmdir(folderPath)
         return True
     else:
         return False
-
 
 def delete_and_make_folder(folderPath):
     """ Deletes folder if already exists and makes folder """

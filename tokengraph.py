@@ -16,13 +16,15 @@ from utils import save_attribute
 class TokenGraph(object):
     """ Stores all methods for building and accessing token relationships """
     # base methods
-    def __init__(self, tokenizer):
+    def __init__(self, tokenizer=None):
         # FIXME: Tokenizer assertion
-        # assert isinstance(tokenizer, tokenizer), ('tokenizer ' \
-        #                         ' expected type Tokenizer, but found type ' \
-        #                         f'{type(tokenizer)}.')
-        assert tokenizer.initialized, ('tokenizer must be initialized before ' \
-                                        'being passed to TokenGraph.')
+        if tokenizer:
+            assert tokenizer.initialized, ('tokenizer must be initialized ' \
+                                            'before being passed to ' \
+                                            'TokenGraph.')
+        else:
+            assert isinstance(tokenizer, None), ('tokenizer must have type ' \
+                                                'Tokenizer or None.')
         self.tokenizer = tokenizer
         self.corrMatrix = None
         self.initialized = False
@@ -49,6 +51,11 @@ class TokenGraph(object):
         assert exists(path), f'Folder {path} cannot be found.'
         assert not self.initialized, ("TokenGraph file can't be loaded into "\
                                         "initialized TokenGraph.")
+        self.corrMatrix = np.load(f'{path}/corrMatrix')
+
+        self.tokenizer =
+
+
 
 
 

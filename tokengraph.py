@@ -38,6 +38,8 @@ class TokenGraph(object):
         """ Saves TokenGraph() to folder at path """
         assert isinstance(path, str), ('path expected type str, but found '\
                                         f'type {type(path)}.')
+        assert self.tokenizer, ('TokenGraph must have valid tokenizer object '\
+                                'prior to saving.')
         assert self.initialized, 'TokenGraph must be initialized before saving.'
         assert not exists(path), (f'Folder {path} already exists. Try deleting'\
                                 ' it or saving TokenizGraph to different path.')
@@ -56,11 +58,9 @@ class TokenGraph(object):
                                                         'TokenGraph.')
         self.corrMatrix = np.load(f'{path}/corrMatrix')
         shellTokenizer = Tokenizer()
-        self.tokenizer =
-
-
-
-
+        self.tokenizer = shellTokenizer.load(f'{path}/tokenizer')
+        self.initialized = True
+        return True
 
     # matrix initialization methods
     def build_corr_matrix_from_iterator(self, iterator):

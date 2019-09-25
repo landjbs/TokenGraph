@@ -13,7 +13,7 @@ from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor
 
-from utils import save_obj, load_obj
+import utils as utils
 
 
 class Tokenizer(object):
@@ -46,13 +46,11 @@ class Tokenizer(object):
         assert isinstance(path, str), ('path expected type str, but found '\
                                         f'type {type(path)}.')
         assert self.initialized, 'Tokenizer must be initialized before saving.'
-        assert not exists(path), (f'Folder {path} already exists. Try deleting'\
-                                ' it or saving Tokenizer to different path.')
-        mkdir(path)
+        utils.safe_make_folder(path)
         # save neccessary attributes for loss-less reconstruction
-        save_obj(self.freqDict, f'{path}/freqDict')
-        save_obj(self.idx, f'{path}/idx')
-        save_obj(self.tokenizer, f'{path}/tokenizer')
+        utils.save_obj(self.freqDict, f'{path}/freqDict')
+        utils.save_obj(self.idx, f'{path}/idx')
+        utils.save_obj(self.tokenizer, f'{path}/tokenizer')
         with open(f'{path}/lower.sav', 'w+') as lowerFile:
             lowerStr = 't' if self.lower else 'f'
             lowerFile.write(lowerStr)
@@ -65,9 +63,9 @@ class Tokenizer(object):
                                         "initialized Tokenizer.")
 
         # load pickled objects
-        self.freqDict = load_obj('freqDict')
-        self.idx = load_obj('idx')
-        self.tokenizer = load_obj('tokenizer')
+        self.freqDict = utils.load_obj('freqDict')
+        self.idx = utils.load_obj('idx')
+        self.tokenizer = utils.load_obj('tokenizer')
         # load lower bool
         with open(f'{path}/lower.sav', 'r') as lowerFile:
             lowerStr = lowerFile.read()

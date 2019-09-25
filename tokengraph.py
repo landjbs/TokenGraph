@@ -52,8 +52,8 @@ class TokenGraph(object):
                                                         'initialized '\
                                                         'TokenGraph.')
         self.corrMatrix = np.load(f'{path}/corrMatrix.npy')
-        shellTokenizer = Tokenizer()
-        self.tokenizer = shellTokenizer.load(f'{path}/tokenizer')
+        self.tokenizer = Tokenizer()
+        self.tokenizer.load(f'{path}/tokenizer')
         self.initialized = True
         return True
 

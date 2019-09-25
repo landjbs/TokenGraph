@@ -44,9 +44,8 @@ class TokenGraph(object):
         assert not exists(path), (f'Folder {path} already exists. Try deleting'\
                                 ' it or saving TokenizGraph to different path.')
         mkdir(path)
-
         np.save(f'{path}/corrMatrix', self.corrMatrix)
-        tokenizer.save(f'{path}/tokenizer')
+        self.tokenizer.save(f'{path}/tokenizer')
         return True
 
     def load(self, path):
@@ -66,7 +65,7 @@ class TokenGraph(object):
     def build_corr_matrix_from_iterator(self, iterator):
         """
         Builds corr matrix from file iterator using mechanical scores from
-        tokenizer
+        tokenizer. Sets initialized to True.
         """
         # cache vars from tokenizer
         vocabSize = self.tokenizer.vocabSize
@@ -77,27 +76,23 @@ class TokenGraph(object):
         textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator
         for i, text in enumerate(tqdm(iterator(), total=textCount)):
-            if i > 1000:
+            if i > 10:
                 break
             # get mechanical scores of tokens in text
             tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
-            # cast token names to token idx nums
-            idScores = {idxDict[token] : score
-                        for token, score in tokenScores.items()}
             # iterate over observed tokens, updating correlations
-            for id, score in idScores.items():
-                for relId, relScore in idScores.items():
+            for id, score in tokenScores.items():
+                for relId, relScore in tokenScores.items():
                     corrMatrix[id, relId] += (score * relScore)
         self.corrMatrix = corrMatrix
+        self.initialized = True
         return True
 
     def search_related_tokens(self, text, n=5):
         """ Finds tokens in text and returns top n related tokens """
         is_positive = lambda score : score > 0
         tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
-        idScores = {self.tokenizer.idx[token] : score
-                    for token, score in tokenScores.items()}
-        for id in idScores:
+        for id in tokenScores:
             relatedTokens = [(relId, score) for relId, score
                             in enumerate(self.corrMatrix[id])
                             if is_positive(score)]

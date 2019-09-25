@@ -212,7 +212,7 @@ class Tokenizer(object):
         freqDiff = observedFreq - self.freqDict[token][0]
         if freqDiff <= 0:
             return None
-        return freqDiff
+        return round(freqDiff, 4)
 
     def single_mechanically_score_tokens(self, text):
         """
@@ -221,11 +221,11 @@ class Tokenizer(object):
         """
         tokenCounts = self.clean_and_tokenize(text)
         wordNum = len(text.split())
-        tokenScores =  {self.idx[token] : self.score_single_token(token,
+        tokenScores =  {token : self.score_single_token(token,
                                                         (count/wordNum))
                         for token, count in tokenCounts.items()}
-        return {token : score for token, score in tokenScores.items()
-                        if score != None}
+        return {self.idx[token] : score for token, score in tokenScores.items()
+                if ((score != None) and (token in self.idx))}
 
     # def KNOWLEDGE_mechanically_score_tokens(self, text, maxChunkSize=5):
     #     """ Ranks tokenes according to freqDict and observed freq in text """

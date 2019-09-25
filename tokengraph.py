@@ -3,6 +3,7 @@ Implements TokenGraph() object for storing and accesing
 relationships between tokens
 """
 
+import pickle
 import numpy as np
 from tqdm import tqdm
 from os import mkdir
@@ -36,6 +37,13 @@ class TokenGraph(object):
         assert not exists(path), (f'Folder {path} already exists. Try deleting'\
                                 ' it or saving TokenizGraph to different path.')
         mkdir(path)
+
+        def save_attribute(obj, name):
+            """ Helper saves attribute to file under path """
+            with open(f'{path}/{name}.sav', 'wb+') as attributeFile:
+                pickle.dump(obj, attributeFile)
+            return True
+
     # TODO: IMPLEMENT LOAD
 
 

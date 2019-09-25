@@ -66,7 +66,7 @@ class TokenGraph(object):
             relatedTokens = [(relId, score) for relId, score
                             in enumerate(self.corrMatrix[id])
                             if is_positive(score)]
-            relatedTokens.sort(reverse=False, key=itemgetter(1))
+            relatedTokens.sort(reverse=True, key=itemgetter(1))
             topTokens = relatedTokens[:n]
             print(f'{"-"*80}\n{id}')
             for relToken in topTokens:

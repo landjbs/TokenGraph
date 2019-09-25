@@ -211,6 +211,10 @@ class Tokenizer(object):
         # normedDocFreq = 1 / self.freqDict[token][1]
         # tf_idf = normedTermFreq * normedDocFreq
         # return round(1 + log(tf_idf), ndigits=4)
+        freqDiff = observedFreq - self.freqDict[token][0]
+        if freqDiff <= 0:
+            return None
+        return freqDiff
 
     def single_mechanically_score_tokens(self, text):
         """
@@ -218,8 +222,10 @@ class Tokenizer(object):
         """
         tokenCounts = self.clean_and_tokenize(text)
         wordNum = len(text.split())
-        return {token : self.score_single_token(token, (count/wordNum))
-                for token, count in tokenCounts.items()}
+        tokenScores =  {token : self.score_single_token(token, (count/wordNum))
+                        for token, count in tokenCounts.items()}
+        return {token : score for token, score in tokenScores.items()
+                        if score != None}
 
     # def KNOWLEDGE_mechanically_score_tokens(self, text, maxChunkSize=5):
     #     """ Ranks tokenes according to freqDict and observed freq in text """

@@ -44,6 +44,7 @@ class TokenGraph(object):
                 pickle.dump(obj, attributeFile)
             return True
 
+
     # TODO: IMPLEMENT LOAD
 
 

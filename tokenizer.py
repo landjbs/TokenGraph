@@ -191,7 +191,7 @@ class Tokenizer(object):
         Builds freqDict, vocabSize, tokenizer, idx, and reverse idx from wiki
         file. Takes tokenNum tokens between minFreq and maxFreq.
         """
-        self.freq_dict_from_wiki_file()
+        self.freq_dict_from_wiki_file(self.wiki_iterator)
         self.filter_freq_dict(minFreq, maxFreq, tokenNum)
         self.build_tokenizer()
         self.build_idx()
@@ -219,10 +219,12 @@ class Tokenizer(object):
     def single_mechanically_score_tokens(self, text):
         """
         Ranks token scores in text using freqDict and assuming no subtokens
+        and converts token names to idx number
         """
         tokenCounts = self.clean_and_tokenize(text)
         wordNum = len(text.split())
-        tokenScores =  {token : self.score_single_token(token, (count/wordNum))
+        tokenScores =  {self.idx[token] : self.score_single_token(token,
+                                                        (count/wordNum))
                         for token, count in tokenCounts.items()}
         return {token : score for token, score in tokenScores.items()
                         if score != None}

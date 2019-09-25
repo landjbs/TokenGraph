@@ -4,6 +4,7 @@ features of pre-ranked word vectors and targets of convergence ranked word
 vectors.
 """
 
+
 def graph_rank_weight_vector(text, maxIter, minDelta):
     """
     Rescores mechanical token weight vector using TokenGraph by running shadow

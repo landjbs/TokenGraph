@@ -10,6 +10,7 @@ from os import mkdir
 from os.path import exists
 from operator import itemgetter
 
+from tokenizer import Tokenizer
 from utils import save_attribute
 
 
@@ -49,10 +50,12 @@ class TokenGraph(object):
     def load(self, path):
         """ Loads TokenGraph() from folder at path """
         assert exists(path), f'Folder {path} cannot be found.'
-        assert not self.initialized, ("TokenGraph file can't be loaded into "\
-                                        "initialized TokenGraph.")
+        assert not (self.initialized or self.tokenizer), ('TokenGraph file' \
+                                                        "can't be loaded into "\
+                                                        'initialized '\
+                                                        'TokenGraph.')
         self.corrMatrix = np.load(f'{path}/corrMatrix')
-
+        shellTokenizer = Tokenizer()
         self.tokenizer =
 
 

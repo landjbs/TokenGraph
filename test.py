@@ -1,26 +1,17 @@
 from tokenizer import Tokenizer
 from tokengraph import TokenGraph
 
-x = Tokenizer()
+tokenizerObj = Tokenizer()
+tokenizerObj.language_from_wiki_file(minFreq=0.0000001, maxFreq=0.0007,
+                                    tokenNum=50000)
+tokenizerObj.save('data/outData/50000_Tokenizer')
 
-x.load('data/outData/10000_token_test')
 
-z = TokenGraph(x)
+graphObj = TokenGraph(tokenizerObj)
+graphObj.build_corr_matrix_from_iterator(x.wiki_iterator)
+graphObj.save('data/outData/5000Text_graphObj')
 
-z.build_corr_matrix_from_iterator(x.wiki_iterator)
-
-print(z)
-
-z.save('test')
-
-del x
-del z
-
-z = TokenGraph()
-
-z.load('test')
-
-print(z)
+del tokenizerObj
 
 while True:
     t = input('t: ')

@@ -177,7 +177,7 @@ class Tokenizer(object):
         Builds freqDict, vocabSize, tokenizer, idx, and reverse idx from wiki
         file. Takes tokenNum tokens between minFreq and maxFreq.
         """
-        self.freq_dict_from_wiki_file(self.wiki_iterator)
+        self.freq_dict_from_file_iterator(iterator=self.wiki_iterator)
         self.filter_freq_dict(minFreq, maxFreq, tokenNum)
         self.build_tokenizer()
         self.build_idx()

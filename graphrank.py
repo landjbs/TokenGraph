@@ -6,11 +6,15 @@ vectors.
 
 import numpy as np
 
-corrMatrix = np.array([[1, 0.4], [0.6, 1]])
+corrMatrix = np.array([[1, 0.9], [0.2, 1]])
 textVec = np.array([0.5, 0.5])
 
+for num, col in enumerate(corrMatrix.T):
+    colSum = np.sum(col)
+    print(colSum)
+    corrMatrix[:, num] = np.divide(col, colSum)
 
-def graph_rank_test(corrMatrix, textVec, iter=40):
+def graph_rank_test(corrMatrix, textVec, iter=400):
     iterMatrix = np.linalg.matrix_power(corrMatrix, iter)
     scoreVec = np.dot(iterMatrix, textVec)
     return scoreVec

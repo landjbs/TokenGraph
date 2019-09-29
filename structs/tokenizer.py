@@ -122,8 +122,6 @@ class Tokenizer(object):
         articleCount = len([None for _ in iterator()])
         # iterate over wiki file
         for i, text in enumerate(tqdm(iterator(), total=articleCount)):
-            if i > 10:
-                break
             # find tokens in text
             cleanText = self.clean(text)
             tokenList = cleanText.split()

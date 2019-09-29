@@ -107,7 +107,7 @@ class Tokenizer(object):
     # methods for gathering language data
     def calc_tf_idf(self, termFreq, docFreq):
         """ Calcs scalar token freq score from tf and idf """
-        print(f'{termFreq} | {docFreq}')
+        # DEBUG: TF IDF SEEMS OFF
         return 1 + log(termFreq * docFreq)
 
     def freq_dict_from_file_iterator(self, iterator):

@@ -9,7 +9,7 @@ from tqdm import tqdm
 from operator import itemgetter
 
 import utils as utils
-from tokenizer import Tokenizer
+from structs.tokenizer import Tokenizer
 
 
 class TokenGraph(object):

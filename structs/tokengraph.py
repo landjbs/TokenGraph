@@ -80,12 +80,19 @@ class TokenGraph(object):
             for id, score in tokenScores.items():
                 for relId, relScore in tokenScores.items():
                     corrMatrix[id, relId] += (score * relScore)
+        # norm each column in corrMatrix to unit sum
+        for colNum, colVals in enumerate(corrMatrix.T):
+            colSum = np.sum(colVals)
+            normedVals = np.divide(colVals, colSum)
+            corrMatrix[:, colNum] = normedVals
+        # update object
         self.corrMatrix = corrMatrix
         self.initialized = True
         return True
 
     def search_related_tokens(self, text, n=5):
         """ Finds tokens in text and returns top n related tokens """
+        # TODO: REIMP OR REMOVE
         is_positive = lambda score : score > 0
         tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
         for id in tokenScores:

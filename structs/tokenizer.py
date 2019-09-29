@@ -5,7 +5,7 @@ Language() class for storing metrics about the language used.
 
 import re
 import pickle
-from numpy import log
+from numpy import log, mean
 from tqdm import tqdm
 from unidecode import unidecode
 from collections import Counter
@@ -107,6 +107,7 @@ class Tokenizer(object):
     # methods for gathering language data
     def calc_tf_idf(self, termFreq, docFreq):
         """ Calcs scalar token freq score from tf and idf """
+        print(f'{termFreq} | {docFreq}')
         return 1 + log(termFreq * docFreq)
 
     def freq_dict_from_file_iterator(self, iterator):
@@ -121,6 +122,8 @@ class Tokenizer(object):
         articleCount = len([None for _ in iterator()])
         # iterate over wiki file
         for i, text in enumerate(tqdm(iterator(), total=articleCount)):
+            if i > 10:
+                break
             # find tokens in text
             cleanText = self.clean(text)
             tokenList = cleanText.split()
@@ -141,6 +144,7 @@ class Tokenizer(object):
         freqDict = {token : self.calc_tf_idf(calc_termFreq(rawCount),
                             calc_docFreq(tokenAppearances[token]))
                     for token, rawCount in tokenCounts.items()}
+        meanScore = mean([elt for elt in freqDict.values()])
         self.freqDict = freqDict
         self.vocabSize = len(freqDict)
         return True
@@ -150,11 +154,16 @@ class Tokenizer(object):
         Filters freq dict to tokenNum tokens between min and maxFreq. Updates
         vocab size in conjunction.
         """
+        assert (tokenNum > 0), f'Filtering to tokenNum={tokenNum} would result'\
+                                'in empty freqDict.'
         qualifies = lambda freq : (maxFreq > freq > minFreq)
         filteredFreqDict = {token : freq
                             for i, (token, freq)
                             in enumerate(self.freqDict.items())
                             if (qualifies(freq) and (i < tokenNum))}
+        assert (filteredFreqDict != dict()), ('Filtering removed all elements '\
+                                            'from freqDict. Try chaning min '\
+                                            'or max frequency parameters.')
         self.freqDict = filteredFreqDict
         self.vocabSize = len(filteredFreqDict)
         return True

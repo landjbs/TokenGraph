@@ -3,7 +3,7 @@ from structs.tokengraph import TokenGraph
 
 tokenizerObj = Tokenizer()
 tokenizerObj.language_from_wiki_file(minFreq=0.0000001, maxFreq=0.0007,
-                                    tokenNum=50000)
+                                    tokenNum=5000)
 tokenizerObj.save('data/outData/50000_Tokenizer')
 
 while True:

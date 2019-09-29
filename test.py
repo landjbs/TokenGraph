@@ -1,8 +1,10 @@
+# import graphrank
+
 from structs.tokenizer import Tokenizer
 from structs.tokengraph import TokenGraph
 
 tokenizerObj = Tokenizer()
-tokenizerObj.language_from_wiki_file(minFreq=-1000000, maxFreq=0.0007,
+tokenizerObj.language_from_wiki_file(minFreq=-1000000, maxFreq=1000000,
                                     tokenNum=5000)
 tokenizerObj.save('data/outData/50000_Tokenizer')
 

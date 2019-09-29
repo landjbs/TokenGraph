@@ -4,6 +4,20 @@ features of pre-ranked word vectors and targets of convergence ranked word
 vectors.
 """
 
+import numpy as np
+
+corrMatrix = np.array([[1, 0.4], [0.6, 1]])
+textVec = np.array([0.5, 0.5])
+
+
+def graph_rank_test(corrMatrix, textVec, iter=40):
+    iterMatrix = np.linalg.matrix_power(corrMatrix, iter)
+    scoreVec = np.dot(iterMatrix, textVec)
+    return scoreVec
+
+
+print(graph_rank_test(corrMatrix, textVec))
+
 
 def graph_rank_weight_vector(text, maxIter, minDelta):
     """

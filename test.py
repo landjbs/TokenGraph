@@ -1,8 +1,8 @@
-import graphrank
+# import graphrank
 
-# from structs.tokenizer import Tokenizer
-# from structs.tokengraph import TokenGraph
-#
+from structs.tokenizer import Tokenizer
+from structs.tokengraph import TokenGraph
+
 # tokenizerObj = Tokenizer()
 # tokenizerObj.language_from_wiki_file(minFreq=-1000000, maxFreq=1000000,
 #                                     tokenNum=5000)
@@ -14,14 +14,20 @@ import graphrank
 #         break
 #     else:
 #         print(tokenizerObj.single_mechanically_score_tokens(t))
-#
+
+# tokenizerObj = Tokenizer()
+# tokenizerObj.load('data/outData/50000_Tokenizer')
+# print(tokenizerObj)
 #
 # graphObj = TokenGraph(tokenizerObj)
-# graphObj.build_corr_matrix_from_iterator(x.wiki_iterator)
+# graphObj.build_corr_matrix_from_iterator(tokenizerObj.wiki_iterator)
 # graphObj.save('data/outData/10000Text_graphObj')
 #
 # del tokenizerObj
-#
-# while True:
-#     t = input('t: ')
-#     z.search_related_tokens(t)
+
+graphObj = TokenGraph()
+graphObj.load('data/outData/10000Text_graphObj')
+
+while True:
+    t = input('t: ')
+    graphObj.search_related_tokens(t)

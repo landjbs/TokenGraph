@@ -105,9 +105,9 @@ class Tokenizer(object):
             return spacedString
 
     # methods for gathering language data
-    def calc_tf_idf(self, termFreq, docFrec):
+    def calc_tf_idf(self, termFreq, docFreq):
         """ Calcs scalar token freq score from tf and idf """
-        return
+        return 1 + log(termFreq * docFreq)
 
     def freq_dict_from_file_iterator(self, iterator):
         """ Builds freq dict from file iterator. Updates vocabSize """

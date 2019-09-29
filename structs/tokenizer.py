@@ -105,8 +105,8 @@ class Tokenizer(object):
             return spacedString
 
     # methods for gathering language data
-    def calc_tf_idf(self, freqTup):
-        """ Calcs scalar token freq score from tuple of form (tf, idf) """
+    def calc_tf_idf(self, termFreq, docFrec):
+        """ Calcs scalar token freq score from tf and idf """
         return
 
     def freq_dict_from_file_iterator(self, iterator):

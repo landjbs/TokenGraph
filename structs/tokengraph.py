@@ -72,7 +72,7 @@ class TokenGraph(object):
         textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator
         for i, text in enumerate(tqdm(iterator(), total=textCount)):
-            if i > 5000:
+            if i > 10000:
                 break
             # get mechanical scores of tokens in text
             tokenScores = self.tokenizer.single_mechanically_score_tokens(text)

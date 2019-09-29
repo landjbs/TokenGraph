@@ -105,6 +105,10 @@ class Tokenizer(object):
             return spacedString
 
     # methods for gathering language data
+    def calc_tf_idf(self, freqTup):
+        """ Calcs scalar token freq score from tuple of form (tf, idf) """
+        return
+
     def freq_dict_from_file_iterator(self, iterator):
         """ Builds freq dict from file iterator. Updates vocabSize """
         # initialize counter to map tokens to raw number of occurences
@@ -134,7 +138,7 @@ class Tokenizer(object):
         calc_termFreq = lambda tokenCount : tokenCount / totalLength
         calc_docFreq = lambda tokenAppearance : log(float(i) / tokenAppearance)
         # use total num to norm tokenCounts and find frequency for each token
-        freqDict = {token : (calc_termFreq(rawCount),
+        freqDict = {token : self.calc_tf_idf(calc_termFreq(rawCount),
                             calc_docFreq(tokenAppearances[token]))
                     for token, rawCount in tokenCounts.items()}
         self.freqDict = freqDict

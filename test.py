@@ -1,5 +1,5 @@
-from tokenizer import Tokenizer
-from tokengraph import TokenGraph
+from structs.tokenizer import Tokenizer
+from structs.tokengraph import TokenGraph
 
 tokenizerObj = Tokenizer()
 tokenizerObj.language_from_wiki_file(minFreq=0.0000001, maxFreq=0.0007,
@@ -9,7 +9,7 @@ tokenizerObj.save('data/outData/50000_Tokenizer')
 
 graphObj = TokenGraph(tokenizerObj)
 graphObj.build_corr_matrix_from_iterator(x.wiki_iterator)
-graphObj.save('data/outData/5000Text_graphObj')
+graphObj.save('data/outData/10000Text_graphObj')
 
 del tokenizerObj
 

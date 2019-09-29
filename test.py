@@ -6,6 +6,13 @@ tokenizerObj.language_from_wiki_file(minFreq=0.0000001, maxFreq=0.0007,
                                     tokenNum=50000)
 tokenizerObj.save('data/outData/50000_Tokenizer')
 
+while True:
+    t = input('t: ')
+    if t == 'b':
+        break
+    else:
+        print(tokenizerObj.single_mechanically_score_tokens(t))
+
 
 graphObj = TokenGraph(tokenizerObj)
 graphObj.build_corr_matrix_from_iterator(x.wiki_iterator)

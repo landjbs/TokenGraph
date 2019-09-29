@@ -150,11 +150,11 @@ class Tokenizer(object):
         Filters freq dict to tokenNum tokens between min and maxFreq. Updates
         vocab size in conjunction.
         """
-        qualifies = lambda freqTup : (maxFreq > freqTup[0] > minFreq)
-        filteredFreqDict = {token : freqTup
-                            for i, (token, freqTup)
+        qualifies = lambda freq : (maxFreq > freq > minFreq)
+        filteredFreqDict = {token : freq
+                            for i, (token, freq)
                             in enumerate(self.freqDict.items())
-                            if (qualifies(freqTup) and (i < tokenNum))}
+                            if (qualifies(freq) and (i < tokenNum))}
         self.freqDict = filteredFreqDict
         self.vocabSize = len(filteredFreqDict)
         return True

@@ -105,7 +105,7 @@ class TokenGraph(object):
             for relToken in topTokens:
                 print(f'<{relToken[1]}> {self.tokenizer.reverseIdx[relToken[0]]}')
 
-    def graph_rank_text(self, text, iter=5, delta=0.0000001, n=5):
+    def graph_rank_text(self, text, iter=2, delta=0.001, n=5):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
         # assert tokenFreqs
@@ -117,10 +117,13 @@ class TokenGraph(object):
         # norm weight vector to unit sum
         weightSum = np.sum(rawWeights)
         normedWeights = np.divide(rawWeights, weightSum)
+        for tokenId, tokenFreq in tokenFreqs.items():
+            print(normedWeights[tokenId])
         # run graph ranking over normed weights for iter
         iterMatrix = np.linalg.matrix_power(self.corrMatrix, n=iter)
         scoreVec = np.dot(iterMatrix, normedWeights)
         ## find location and score of top n tokens ##
+        # BUG: sorting method not completely effective
         # initialize top token list with first n tokens of scoreVec
         topTokens = list(zip((i for i in range(n)), scoreVec[:n]))
         minTup = min(topTokens, key=itemgetter(1))
@@ -132,6 +135,14 @@ class TokenGraph(object):
                 topTokens.append((id, score))
                 minTup = min(topTokens, key=itemgetter(1))
                 minLoc, minScore = minTup[0], minTup[1]
-        print(topTokens)
         topTokens.sort(key=itemgetter(1), reverse=True)
-        return topTokens
+        testTop = list(zip((i for i in range(n)), scoreVec[:n]))
+        testTop.sort(key=itemgetter(1), reverse=True)
+        for t1, t2 in zip(topTokens, testTop):
+            if not t1==t2:
+                print(f't1: {t1}    |    t2: {t2}')
+            else:
+                print('==')
+        # assert(testTop==topTokens)
+        return testTop[:n]
+        # return topTokens

@@ -105,22 +105,26 @@ class TokenGraph(object):
             for relToken in topTokens:
                 print(f'<{relToken[1]}> {self.tokenizer.reverseIdx[relToken[0]]}')
 
-    def graph_rank_text(self, text, iter, delta=0.00001, n=20):
+    def graph_rank_text(self, text, iter=20, delta=0.00001, n=20):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
         # init numpy vector of tiny delta weights
         rawWeights = np.tile([delta], reps=self.tokenizer.vocabSize)
         # replace delta with observed freq in observed token idx of weight vec
-        for tokenId, tokenFreq in tokenFreqs:
+        for tokenId, tokenFreq in tokenFreqs.items():
             rawWeights[tokenId] = tokenFreq
         # norm weight vector to unit sum
-        weightSum = np.sum(weightVector)
-        normedWeights = np.divide(weightVector, weightSum)
+        weightSum = np.sum(rawWeights)
+        normedWeights = np.divide(rawWeights, weightSum)
         # run graph ranking over normed weights for iter
         iterMatrix = np.linalg.matrix_power(self.corrMatrix, n=iter)
         scoreVec = np.dot(iterMatrix, normedWeights)
         ## find location and score of top n tokens ##
         # initialize top token list with first n tokens of scoreVec
-        topTokens = [zip((i for i in range(n)), scoreVec[:n])]
-        minScore
-        for id, score in enumerate(scoreVec):
+        topTokens = list(zip((i for i in range(n)), scoreVec[:n]))
+        print(topTokens)
+        minScore = min(topTokens, key=itemgetter(1))
+        minLoc = topTokens.index(minScore)
+        # search score vec for tokens with higher ranking than min top token
+        # for id, score in enumerate(scoreVec):
+        #     if score > minScore:

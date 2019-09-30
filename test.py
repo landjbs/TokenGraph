@@ -30,4 +30,4 @@ graphObj.load('data/outData/10000Text_graphObj')
 
 while True:
     t = input('t: ')
-    print(graphObj.tokenizer.single_mechanically_score_tokens(t))
+    print(graphObj.graph_rank_text(t))

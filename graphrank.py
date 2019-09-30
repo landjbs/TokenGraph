@@ -19,10 +19,6 @@ def graph_rank_test(corrMatrix, textVec, iter=400):
     scoreVec = np.dot(iterMatrix, textVec)
     return scoreVec
 
-
-print(graph_rank_test(corrMatrix, textVec))
-
-
 def graph_rank_weight_vector(text, maxIter, minDelta):
     """
     Rescores mechanical token weight vector using TokenGraph by running shadow

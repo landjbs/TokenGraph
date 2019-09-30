@@ -15,27 +15,22 @@ from structs.tokengraph import TokenGraph
 #     else:
 #         print(tokenizerObj.single_mechanically_score_tokens(t))
 
-# tokenizerObj = Tokenizer()
-# tokenizerObj.load('data/outData/50000_Tokenizer')
-# print(tokenizerObj)
-#
-# graphObj = TokenGraph(tokenizerObj)
-# graphObj.build_corr_matrix_from_iterator(tokenizerObj.wiki_iterator)
-# graphObj.save('data/outData/10000Text_graphObj')
-#
-# del tokenizerObj
+tokenizerObj = Tokenizer()
+tokenizerObj.load('data/outData/50000_Tokenizer')
+print(tokenizerObj)
 
-graphObj = TokenGraph()
-graphObj.load('data/outData/10000Text_graphObj')
+graphObj = TokenGraph(tokenizerObj)
+graphObj.build_corr_matrix_from_iterator(tokenizerObj.wiki_iterator)
+graphObj.save('data/outData/10000Text_graphObj')
 
-import matplotlib.pyplot as plt
+del tokenizerObj
 
-plt.imshow(graphObj.corrMatrix)
-plt.show()
+# graphObj = TokenGraph()
+# graphObj.load('data/outData/10000Text_graphObj')
 
-# while True:
-#     t = input('t: ')
-#     topTokens = (graphObj.graph_rank_text(t))
-#     for id, score in topTokens:
-#         word = graphObj.tokenizer.reverseIdx[id]
-#         print(f'<{score}> {word}')
+while True:
+    t = input('t: ')
+    topTokens = (graphObj.graph_rank_text(t))
+    for id, score in topTokens:
+        word = graphObj.tokenizer.reverseIdx[id]
+        print(f'<{score}> {word}')

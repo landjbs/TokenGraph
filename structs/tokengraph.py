@@ -135,14 +135,6 @@ class TokenGraph(object):
                 topTokens.append((id, score))
                 minTup = min(topTokens, key=itemgetter(1))
                 minLoc, minScore = minTup[0], minTup[1]
+
         topTokens.sort(key=itemgetter(1), reverse=True)
-        testTop = list(zip((i for i in range(n)), scoreVec[:n]))
-        testTop.sort(key=itemgetter(1), reverse=True)
-        for t1, t2 in zip(topTokens, testTop):
-            if not t1==t2:
-                print(f't1: {t1}    |    t2: {t2}')
-            else:
-                print('==')
-        # assert(testTop==topTokens)
-        return testTop[:n]
-        # return topTokens
+        return topTokens

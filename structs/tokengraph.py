@@ -109,6 +109,15 @@ class TokenGraph(object):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
         # init numpy vector of tiny delta weights
-        weightVector = np.tile([delta], reps=self.tokenizer.vocabSize)
+        rawWeights = np.tile([delta], reps=self.tokenizer.vocabSize)
         # replace delta with observed freq in observed token idx of weight vec
         for tokenId, tokenFreq in tokenFreqs:
+            rawWeights[tokenId] = tokenFreq
+        # norm weight vector to unit sum
+        weightSum = np.sum(weightVector)
+        normedWeights = np.divide(weightVector, weightSum)
+        # run graph ranking over normed weights for iter
+        iterMatrix = np.linalg.matrix_power(self.corrMatrix, n=iter)
+        scoreVec = np.dot(iterMatrix, normedWeights)
+        # identify top 20 tokens in score vec and return
+        

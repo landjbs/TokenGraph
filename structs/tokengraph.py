@@ -65,7 +65,6 @@ class TokenGraph(object):
         """
         # cache vars from tokenizer
         vocabSize = self.tokenizer.vocabSize
-        idxDict = self.tokenizer.idx
         # initialize matrix to store token-token correlations
         corrMatrix = np.zeros(shape=(vocabSize, vocabSize))
         # get base count of texts in iterator for tqdm
@@ -90,6 +89,7 @@ class TokenGraph(object):
         self.initialized = True
         return True
 
+    # TODO: Deprecate searching
     def search_related_tokens(self, text, n=5):
         """ Finds tokens in text and returns top n related tokens """
         # TODO: REIMP OR REMOVE
@@ -104,3 +104,11 @@ class TokenGraph(object):
             print(f'{"-"*80}\n{id}')
             for relToken in topTokens:
                 print(f'<{relToken[1]}> {self.tokenizer.reverseIdx[relToken[0]]}')
+
+    def graph_rank_text(self, text, iter, delta=0.00001):
+        # find token counts in text
+        tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
+        # init numpy vector of tiny delta weights
+        weightVector = np.tile([delta], reps=self.tokenizer.vocabSize)
+        # replace delta with observed freq in observed token idx of weight vec
+        for tokenId, tokenFreq in tokenFreqs:

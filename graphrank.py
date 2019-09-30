@@ -23,10 +23,6 @@ def graph_rank_test(corrMatrix, textVec, iter=400):
 print(graph_rank_test(corrMatrix, textVec))
 
 
-def select_sub_graph():
-    """ Selects sub graph of tokens from  """
-
-
 def graph_rank_weight_vector(text, maxIter, minDelta):
     """
     Rescores mechanical token weight vector using TokenGraph by running shadow

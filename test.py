@@ -28,6 +28,14 @@ from structs.tokengraph import TokenGraph
 graphObj = TokenGraph()
 graphObj.load('data/outData/10000Text_graphObj')
 
-while True:
-    t = input('t: ')
-    print(graphObj.graph_rank_text(t))
+import matplotlib.pyplot as plt
+
+plt.imshow(graphObj.corrMatrix)
+plt.show()
+
+# while True:
+#     t = input('t: ')
+#     topTokens = (graphObj.graph_rank_text(t))
+#     for id, score in topTokens:
+#         word = graphObj.tokenizer.reverseIdx[id]
+#         print(f'<{score}> {word}')

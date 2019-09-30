@@ -105,9 +105,10 @@ class TokenGraph(object):
             for relToken in topTokens:
                 print(f'<{relToken[1]}> {self.tokenizer.reverseIdx[relToken[0]]}')
 
-    def graph_rank_text(self, text, iter=20, delta=0.00001, n=20):
+    def graph_rank_text(self, text, iter=5, delta=0.0000001, n=5):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
+        # assert tokenFreqs
         # init numpy vector of tiny delta weights
         rawWeights = np.tile([delta], reps=self.tokenizer.vocabSize)
         # replace delta with observed freq in observed token idx of weight vec
@@ -131,4 +132,6 @@ class TokenGraph(object):
                 topTokens.append((id, score))
                 minTup = min(topTokens, key=itemgetter(1))
                 minLoc, minScore = minTup[0], minTup[1]
-            
+        print(topTokens)
+        topTokens.sort(key=itemgetter(1), reverse=True)
+        return topTokens

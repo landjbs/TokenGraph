@@ -122,9 +122,13 @@ class TokenGraph(object):
         ## find location and score of top n tokens ##
         # initialize top token list with first n tokens of scoreVec
         topTokens = list(zip((i for i in range(n)), scoreVec[:n]))
-        print(topTokens)
-        minScore = min(topTokens, key=itemgetter(1))
-        minLoc = topTokens.index(minScore)
+        minTup = min(topTokens, key=itemgetter(1))
+        minLoc, minScore = minTup[0], minTup[1]
         # search score vec for tokens with higher ranking than min top token
-        # for id, score in enumerate(scoreVec):
-        #     if score > minScore:
+        for id, score in enumerate(scoreVec):
+            if score > minScore:
+                topTokens.pop(minLoc)
+                topTokens.append((id, score))
+                minTup = min(topTokens, key=itemgetter(1))
+                minLoc, minScore = minTup[0], minTup[1]
+            

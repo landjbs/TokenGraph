@@ -26,6 +26,8 @@ class TokenGraph(object):
                                                     ' Tokenizer or None.')
         self.tokenizer = tokenizer
         self.corrMatrix = None
+        # FIXME: IMP CORR DICT
+        self.corrDict = None
         self.initialized = False
 
     def __str__(self):
@@ -49,7 +51,7 @@ class TokenGraph(object):
         utils.path_exists(path)
         assert not (self.initialized or self.tokenizer), ('TokenGraph file' \
                                                         "can't be loaded into "\
-                                                        'initialized '\
+                                                        'an initialized '\
                                                         'TokenGraph.')
         self.corrMatrix = np.load(f'{path}/corrMatrix.npy')
         self.tokenizer = Tokenizer()
@@ -58,6 +60,7 @@ class TokenGraph(object):
         return True
 
     # matrix initialization methods
+    # TODO: Corr matrix --> corr dict
     def build_corr_matrix_from_iterator(self, iterator):
         """
         Builds corr matrix from file iterator using mechanical scores from
@@ -108,7 +111,6 @@ class TokenGraph(object):
     def graph_rank_text(self, text, iter=2, delta=0.001, n=5):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
-        # assert tokenFreqs
         # init numpy vector of tiny delta weights
         rawWeights = np.tile([delta], reps=self.tokenizer.vocabSize)
         # replace delta with observed freq in observed token idx of weight vec
@@ -135,3 +137,9 @@ class TokenGraph(object):
                 minLoc, minScore = minTup[0], minTup[1]
         topTokens.sort(key=itemgetter(1), reverse=True)
         return topTokens
+
+    def DICT_graph_rank_text(self, text, iter, delta):
+        """ Ranks text using corr dict of top tokens """
+        # find token counts in text
+        tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
+        # find

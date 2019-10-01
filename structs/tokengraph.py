@@ -142,4 +142,6 @@ class TokenGraph(object):
         """ Ranks text using corr dict of top tokens """
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
-        # find
+        # find all related tokens of those found
+        relatedTokens = {token : self.corrDict[token]
+                            for token in tokenFreqs.items()}

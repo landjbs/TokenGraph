@@ -117,8 +117,6 @@ class TokenGraph(object):
         # norm weight vector to unit sum
         weightSum = np.sum(rawWeights)
         normedWeights = np.divide(rawWeights, weightSum)
-        for tokenId, tokenFreq in tokenFreqs.items():
-            print(normedWeights[tokenId])
         # run graph ranking over normed weights for iter
         iterMatrix = np.linalg.matrix_power(self.corrMatrix, n=iter)
         scoreVec = np.dot(iterMatrix, normedWeights)
@@ -129,12 +127,11 @@ class TokenGraph(object):
         minTup = min(topTokens, key=itemgetter(1))
         minLoc, minScore = minTup[0], minTup[1]
         # search score vec for tokens with higher ranking than min top token
-        for id, score in enumerate(scoreVec):
+        for id, score in tqdm(enumerate(scoreVec)):
             if score > minScore:
                 topTokens.pop(minLoc)
                 topTokens.append((id, score))
                 minTup = min(topTokens, key=itemgetter(1))
                 minLoc, minScore = minTup[0], minTup[1]
-
         topTokens.sort(key=itemgetter(1), reverse=True)
         return topTokens

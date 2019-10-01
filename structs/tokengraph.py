@@ -66,7 +66,7 @@ class TokenGraph(object):
         # cache vars from tokenizer
         vocabSize = self.tokenizer.vocabSize
         # initialize matrix to store token-token correlations
-        corrMatrix = np.zeros(shape=(vocabSize, vocabSize))
+        corrMatrix = np.zeros(shape=(vocabSize, vocabSize), dtype=np.float32())
         # get base count of texts in iterator for tqdm
         textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator

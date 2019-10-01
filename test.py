@@ -11,11 +11,11 @@ from structs.tokengraph import TokenGraph
 # tokenizerObj = Tokenizer()
 # tokenizerObj.load('data/outData/50000_Tokenizer')
 # print(tokenizerObj)
-
+#
 # graphObj = TokenGraph(tokenizerObj)
 # graphObj.build_corr_matrix_from_iterator(tokenizerObj.wiki_iterator)
 # graphObj.save('data/outData/10000Text_graphObj')
-
+#
 # del tokenizerObj
 
 graphObj = TokenGraph()

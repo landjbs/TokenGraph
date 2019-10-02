@@ -1,7 +1,7 @@
 # import graphrank
 
-from structs.tokenizer import Tokenizer
-from structs.tokengraph import TokenGraph
+# from structs.tokenizer import Tokenizer
+# from structs.tokengraph import TokenGraph
 
 # tokenizerObj = Tokenizer()
 # tokenizerObj.language_from_wiki_file(minFreq=-1000000, maxFreq=1000000,
@@ -18,12 +18,12 @@ from structs.tokengraph import TokenGraph
 #
 # del tokenizerObj
 
-graphObj = TokenGraph()
-graphObj.load('data/outData/10000Text_graphObj')
-
-while True:
-    t = input('t: ')
-    topTokens = (graphObj.graph_rank_text(t))
-    for id, score in topTokens:
-        word = graphObj.tokenizer.reverseIdx[id]
-        print(f'<{score}> {word}')
+# graphObj = TokenGraph()
+# graphObj.load('data/outData/10000Text_graphObj')
+#
+# while True:
+#     t = input('t: ')
+#     topTokens = (graphObj.graph_rank_text(t))
+#     for id, score in topTokens:
+#         word = graphObj.tokenizer.reverseIdx[id]
+#         print(f'<{score}> {word}')

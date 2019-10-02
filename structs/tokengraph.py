@@ -95,6 +95,8 @@ class TokenGraph(object):
             # norm row to unit sum
             rowSum = np.sum(rowVals)
             normdVals = np.divide(rowVals, rowSum)
+            # grab top n tokens from normedVals
+
 
         # iterate over built matrix
         for rowNum, rowVals in enumerate(corrMatrix):

@@ -97,7 +97,9 @@ class TokenGraph(object):
             """
             # norm row to unit sum
             rowSum = np.sum(rowVals)
-            normedVals = np.divide(rowVals, (rowSum + ZERO_BOOSTER))
+            if (rowSum == 0):
+                return []
+            normedVals = np.divide(rowVals, rowSum)
             ## tag and grab top n tokens from normedVals as tuple (score, id) ##
             topVals = [(val, id) for id, val in enumerate(normedVals[:n])]
             minElt = min(topVals, key=itemgetter(1))

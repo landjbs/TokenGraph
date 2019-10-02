@@ -204,6 +204,7 @@ class TokenGraph(object):
             for relatedToken, relatedScore in relatedTokens.items():
                 relatedId = candidateTokens[relatedToken]
                 print(baseId, relatedId)
+                print(relatedScore)
                 miniCorr[baseId, relatedId] += relatedScore
         print(miniCorr)
         # approximate graph ranking over miniCorr for iter iterations

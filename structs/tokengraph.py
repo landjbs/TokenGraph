@@ -201,4 +201,13 @@ class TokenGraph(object):
                 miniCorr[baseId, relatedId] += relatedScore
         # approximate graph ranking over miniCorr for iter iterations
         iterCorr = np.linalg.matrix_power(miniCorr, n=iter)
-        # build
+        # build initial weight vector of all candidate tokens
+        rawWeights = np.tile([delta], reps=candidateNum)
+        # update weights of those tokens actually present
+        for token, freq in tokenFreqs.items():
+            rawWeights[candidateTokens[token]] += 1
+        # norm weight vector to unit
+        normedWeights = np.divide(rawWeights, sum(rawWeights))
+        # pass normed weight vector through ranked matrix
+        convergedWeights = np.dot(iterCorr, normedWeights)
+        

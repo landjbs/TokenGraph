@@ -98,8 +98,14 @@ class TokenGraph(object):
             ## tag and grab top n tokens from normedVals as tuple (score, id) ##
             # initialize top vals list with first n tokens
             topVals = [(val, id) for id, val in enumerate(normedVals[:n])]
-            minVal = min(topVals, key=itemgetter(1))
-            minLoc = topVals.index(minVal)
+            minElt = min(topVals, key=itemgetter(1))
+            minVal, minLoc = minElt[0], minElt[1]
+            for id, val in enumerate(normedVals[n:]):
+                if val > minElt:
+                    _ = topVals.pop(minLoc)
+                    topVals.append((val, id + n))
+                    minElt = min(topVals, key=itemgetter(1))
+                    minVal, minLoc = minElt[0], minElt[1]
 
 
 

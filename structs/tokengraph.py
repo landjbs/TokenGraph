@@ -95,7 +95,28 @@ class TokenGraph(object):
             # norm row to unit sum
             rowSum = np.sum(rowVals)
             normdVals = np.divide(rowVals, rowSum)
-            # grab top n tokens from normedVals
+            ## tag and grab top n tokens from normedVals as tuple (score, id) ##
+            # initialize top vals list with first n tokens
+            topVals = [(val, id) for id, val in enumerate(normedVals[:n])]
+            minVal = min(topVals, key=itemgetter(1))
+            minLoc = topVals.index(minVal)
+
+
+
+
+
+            newList = l[:n]
+            maxElt = max(newList)
+            maxLoc = newList.index(maxElt)
+            for elt in l:
+                if elt < maxElt:
+                    _ = newList.pop(maxLoc)
+                    newList.append(elt)
+                    maxElt = max(newList)
+                    maxLoc = newList.index(maxElt)
+            newList.sort()
+            return newList
+
 
 
         # iterate over built matrix

@@ -199,3 +199,6 @@ class TokenGraph(object):
             for relatedToken, relatedScore in relatedTokens.items():
                 relatedId = candidateTokens[relatedTokens]
                 miniCorr[baseId, relatedId] += relatedScore
+        # approximate graph ranking over miniCorr for iter iterations
+        iterCorr = np.linalg.matrix_power(miniCorr, n=iter)
+        # build

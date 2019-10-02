@@ -210,4 +210,10 @@ class TokenGraph(object):
         normedWeights = np.divide(rawWeights, sum(rawWeights))
         # pass normed weight vector through ranked matrix
         convergedWeights = np.dot(iterCorr, normedWeights)
-        
+        # build reverse index to access original token id from mini id
+        reverseCandidateIdx = {newId : oldId for newId, oldId
+                                in candidateTokens.items()}
+        # return dict mapping tokens to their ranked weights
+        return {reverseCandidateIdx[newId] : weight
+                for newId, weight in enumerate(convergedWeights)}
+                

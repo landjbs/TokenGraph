@@ -33,14 +33,14 @@ import numpy as np
 from time import time
 
 def make_big():
-    return np.random.randint(0, 10000, size=100000)
+    return [e for e in np.random.randint(0, 10000, size=100000)]
 
 def sort_1(l, n):
     newList = []
     for i in range(n):
         minLoc = l.index(min(l))
         newAdd = l.pop(minLoc)
-        newList += newAdd
+        newList.append(newAdd)
     return newList
 
 def sort_2(l, n):
@@ -68,13 +68,18 @@ for i in tqdm(range(iter)):
     x = make_big()
     # 1
     s_1 = time()
-    l_1 = sort_1(x, n)
+    test1 = x.copy()
+    l_1 = sort_1(test1, n)
     t_1 += time() - s_1
     # 2
     s_2 = time()
-    l_2 = sort_2(x, n)
+    test2 = x.copy()
+    l_2 = sort_2(test2, n)
     t_2 += time() - s_2
-    if not l_1 == l_2:
-        print('No')
+    # if not l_1 == l_2:
+    #     real = x.copy()
+    #     real.sort()
+    #     real = real[:n]
+    #     print(f'{"-"*80}\nREAL: {real}\n{l_1}\n{l_2}\n{"-"*80}')
 
 print(f'Results:\n\tMethod 1: {t_1 / iter}\n\tMethod 2: {t_2 / iter}')

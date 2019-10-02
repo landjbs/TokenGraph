@@ -61,10 +61,14 @@ class TokenGraph(object):
 
     # matrix initialization methods
     # TODO: Corr matrix --> corr dict
-    def build_corr_matrix_from_iterator(self, iterator):
+    def build_corr_matrix_from_iterator(self, iterator, n):
         """
         Builds corr matrix from file iterator using mechanical scores from
-        tokenizer. Sets initialized to True.
+        tokenizer and uses corr matrix to build dict of top related tokens for
+        each token. Sets initialized to True.
+        Args:
+            iterator:       File iterator that returns generator of text strings
+            n:              Number of
         """
         # cache vars from tokenizer
         vocabSize = self.tokenizer.vocabSize
@@ -82,11 +86,13 @@ class TokenGraph(object):
             for id, score in tokenScores.items():
                 for relId, relScore in tokenScores.items():
                     corrMatrix[id, relId] += (score * relScore)
-        # norm each column in corrMatrix to unit sum
-        for colNum, colVals in enumerate(corrMatrix.T):
-            colSum = np.sum(colVals)
-            normedVals = np.divide(colVals, colSum)
-            corrMatrix[:, colNum] = normedVals
+        # norm each row in corrMatrix to unit sum
+        for rowNum, rowVals in enumerate(corrMatrix):
+            rowSum = np.sum(rowVals)
+            normedVals = np.divide(rowVals, rowSum)
+            corrMatrix[rowNum, :] = normedVals
+        # convert corr matrix to dict of top n tokens for each token
+        for row in corrMatrix
         # update object
         self.corrMatrix = corrMatrix
         self.initialized = True

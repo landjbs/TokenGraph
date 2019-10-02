@@ -178,9 +178,15 @@ class TokenGraph(object):
         # find all related tokens of those found
         relatedTokens = {token : self.corrDict[token]
                             for token in tokenFreqs.items()}
+        # build a set of candidates for scoring
+        candidateTokens = set()
+        for token in relatedTokens.keys():
+            candidateTokens.add(token)
+        
+        # miniCorr matrix has dimensions equal to cardinality of candidate set
+
         # determine size for mini corr matrix
         maxRelated = max([len(related) for related in related.values()])
         # build numpy array of maxRelated dims
         miniCorr = np.zeros((maxRelated, maxRelated))
         # update correlation pointers in minCorr matrix
-        

@@ -26,7 +26,7 @@ class Tokenizer(object):
         self.freqDict   =   None
         self.idx        =   None
         self.reverseIdx =   None
-        self.tokenizer  = KeywordProcessor()
+        self.tokenizer  =   KeywordProcessor()
         # high level attribute to indicate initialization
         self.initialized = False
         # matches non-alphanumeric, space, or sentence-ending punctuation

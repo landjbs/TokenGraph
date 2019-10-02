@@ -30,7 +30,16 @@
 
 import numpy as np
 
-x = {'a' : [0 for _ in range(np.random.randint(0, 100))]
+x = {'a' : [np.random.randint(0,10) for _ in range(np.random.randint(0, 100))]
     for _ in range(100)}
 
-print(max([len(l) for l in x.values()]))
+z = set()
+
+for t in x.keys():
+    z.add(t)
+
+for l in x.values():
+    for e in l:
+        z.add(e)
+
+print(z)

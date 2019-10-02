@@ -166,9 +166,21 @@ class TokenGraph(object):
         return topTokens
 
     def DICT_graph_rank_text(self, text, iter, delta):
-        """ Ranks text using corr dict of top tokens """
+        """
+        Ranks text using corr dict of top related tokens for each token found
+        Args:
+            text:       String of raw text to tag
+            iter:       Number of iterations over which to approximate ranking
+            delta:      Initial score to assign shadow token candidates
+        """
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
         # find all related tokens of those found
         relatedTokens = {token : self.corrDict[token]
                             for token in tokenFreqs.items()}
+        # determine size for mini corr matrix
+        maxRelated = max([len(related) for related in related.values()])
+        # build numpy array of maxRelated dims
+        miniCorr = np.zeros((maxRelated, maxRelated))
+        # update correlation pointers in minCorr matrix
+        

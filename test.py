@@ -27,3 +27,10 @@
 #     for id, score in topTokens:
 #         word = graphObj.tokenizer.reverseIdx[id]
 #         print(f'<{score}> {word}')
+
+import numpy as np
+
+x = {'a' : [0 for _ in range(np.random.randint(0, 100))]
+    for _ in range(100)}
+
+print(max([len(l) for l in x.values()]))

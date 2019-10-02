@@ -5,8 +5,8 @@ Language() class for storing metrics about the language used.
 
 import re
 import pickle
-from numpy import log, mean
 from tqdm import tqdm
+from numpy import log, mean
 from unidecode import unidecode
 from collections import Counter
 from flashtext import KeywordProcessor

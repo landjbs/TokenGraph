@@ -188,8 +188,14 @@ class TokenGraph(object):
             for token in tokenList:
                 candidateTokens.update({token : newId})
                 newId += 1
-        # miniCorr matrix has dimensions equal to cardinality of candidate set
+        # miniCorr matrix has dimensions equal to cardinality of candidate dict
         candidateNum = len(candidateTokens)
         miniCorr = np.zeros(size=(candidateTokens, candidateTokens))
         # update correlation pointers in minCorr matrix
-        for baseToken, relatedToken in relatedTokens:
+        for baseToken, relatedToken in relatedTokens.items():
+            # find new id of baseToken
+            baseId = candidateTokens[baseToken]
+            # add all pointer from baseId
+            for relatedToken, relatedScore in relatedTokens.items():
+                relatedId = candidateTokens[relatedTokens]
+                miniCorr[baseId, relatedId] += relatedScore

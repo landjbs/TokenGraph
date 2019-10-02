@@ -182,7 +182,7 @@ class TokenGraph(object):
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)
         # find all related tokens of those found
         relatedTokens = {token : self.corrDict[token]
-                            for token in tokenFreqs.items()}
+                            for token in tokenFreqs.keys()}
         # build a dict of candidates for scoring and new id in miniCorr
         candidateTokens = dict()
         newId = 0
@@ -195,15 +195,17 @@ class TokenGraph(object):
                 newId += 1
         # miniCorr matrix has dimensions equal to cardinality of candidate dict
         candidateNum = len(candidateTokens)
-        miniCorr = np.zeros(size=(candidateTokens, candidateTokens))
+        miniCorr = np.zeros(shape=(candidateNum, candidateNum))
         # update correlation pointers in minCorr matrix
         for baseToken, relatedToken in relatedTokens.items():
             # find new id of baseToken
             baseId = candidateTokens[baseToken]
             # add all pointer from baseId
             for relatedToken, relatedScore in relatedTokens.items():
-                relatedId = candidateTokens[relatedTokens]
+                relatedId = candidateTokens[relatedToken]
+                print(baseId, relatedId)
                 miniCorr[baseId, relatedId] += relatedScore
+        print(miniCorr)
         # approximate graph ranking over miniCorr for iter iterations
         iterCorr = np.linalg.matrix_power(miniCorr, n=iter)
         # build initial weight vector of all candidate tokens

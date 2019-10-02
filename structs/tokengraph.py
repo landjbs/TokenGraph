@@ -86,13 +86,24 @@ class TokenGraph(object):
             for id, score in tokenScores.items():
                 for relId, relScore in tokenScores.items():
                     corrMatrix[id, relId] += (score * relScore)
-        # norm each row in corrMatrix to unit sum
+
+        def norm_sort_and_filter_row(rowVals, n):
+            """
+            Helper takes a single row from corr matrix and returns top n tokens
+            from row after norming.
+            """
+            # norm row to unit sum
+            rowSum = np.sum(rowVals)
+            normdVals = np.divide(rowVals, rowSum)
+
+        # iterate over built matrix
         for rowNum, rowVals in enumerate(corrMatrix):
+
             rowSum = np.sum(rowVals)
             normedVals = np.divide(rowVals, rowSum)
-            corrMatrix[rowNum, :] = normedVals
-        # convert corr matrix to dict of top n tokens for each token
-        for row in corrMatrix
+
+
+            # corrMatrix[rowNum, :] = normedVals
         # update object
         self.corrMatrix = corrMatrix
         self.initialized = True

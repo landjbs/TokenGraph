@@ -96,7 +96,6 @@ class TokenGraph(object):
             rowSum = np.sum(rowVals)
             normdVals = np.divide(rowVals, rowSum)
             ## tag and grab top n tokens from normedVals as tuple (score, id) ##
-            # initialize top vals list with first n tokens
             topVals = [(val, id) for id, val in enumerate(normedVals[:n])]
             minElt = min(topVals, key=itemgetter(1))
             minVal, minLoc = minElt[0], minElt[1]
@@ -106,35 +105,17 @@ class TokenGraph(object):
                     topVals.append((val, id + n))
                     minElt = min(topVals, key=itemgetter(1))
                     minVal, minLoc = minElt[0], minElt[1]
+            topVals.sort(reverse=True, key=itemgetter(1))
+            return topVals
 
+        # build corr dict from corr matrix
+        corrDict = {topId : norm_sort_and_filter_row(corrRow)
+                    for topId, corrRow in enumerate(corrMatrix)}
 
+        del corrMatrix
 
-
-
-            newList = l[:n]
-            maxElt = max(newList)
-            maxLoc = newList.index(maxElt)
-            for elt in l:
-                if elt < maxElt:
-                    _ = newList.pop(maxLoc)
-                    newList.append(elt)
-                    maxElt = max(newList)
-                    maxLoc = newList.index(maxElt)
-            newList.sort()
-            return newList
-
-
-
-        # iterate over built matrix
-        for rowNum, rowVals in enumerate(corrMatrix):
-
-            rowSum = np.sum(rowVals)
-            normedVals = np.divide(rowVals, rowSum)
-
-
-            # corrMatrix[rowNum, :] = normedVals
         # update object
-        self.corrMatrix = corrMatrix
+        self.corrDict = corrDict
         self.initialized = True
         return True
 

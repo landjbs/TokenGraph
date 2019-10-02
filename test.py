@@ -38,36 +38,43 @@ def make_big():
 def sort_1(l, n):
     newList = []
     for i in range(n):
-         minLoc = l.index(min(l))
-         newAdd = l.pop(minLoc)
-         newList += newAdd
-     return newList
+        minLoc = l.index(min(l))
+        newAdd = l.pop(minLoc)
+        newList += newAdd
+    return newList
 
- def sort_2(l, n):
-     newList = l[:n]
-     maxElt = max(newList)
-     maxLoc = newList.index(maxElt)
-     for elt in l:
-         if elt < maxElt:
-             _ = newList.pop(maxLoc)
-             newList.append(elt)
-             maxElt = max(newList)
-             maxLoc = newList.index(maxElt)
-     newList.sort()
-     return newList
+def sort_2(l, n):
+    newList = l[:n]
+    maxElt = max(newList)
+    maxLoc = newList.index(maxElt)
+    for elt in l:
+        if elt < maxElt:
+            _ = newList.pop(maxLoc)
+            newList.append(elt)
+            maxElt = max(newList)
+            maxLoc = newList.index(maxElt)
+    newList.sort()
+    return newList
 
 
 t_1 = 0
 t_2 = 0
+iter = 100
 n = 50
 
 from tqdm import tqdm
 
-for i in tqdm(range(100)):
+for i in tqdm(range(iter)):
     x = make_big()
     # 1
     s_1 = time()
-    l_1 = sort(x, n)
+    l_1 = sort_1(x, n)
     t_1 += time() - s_1
     # 2
-    
+    s_2 = time()
+    l_2 = sort_2(x, n)
+    t_2 += time() - s_2
+    if not l_1 == l_2:
+        print('No')
+
+print(f'Results:\n\tMethod 1: {t_1 / iter}\n\tMethod 2: {t_2 / iter}')

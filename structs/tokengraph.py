@@ -11,6 +11,8 @@ from operator import itemgetter
 import utils as utils
 from structs.tokenizer import Tokenizer
 
+# tiny booster to prevent zero values in division
+ZERO_BOOSTER = 0.0000000001
 
 class TokenGraph(object):
     """ Stores all methods for building and accessing token relationships """
@@ -68,7 +70,8 @@ class TokenGraph(object):
         each token. Sets initialized to True.
         Args:
             iterator:       File iterator that returns generator of text strings
-            n:              Number of
+            n:              Number of tokens to include in each token's ranked
+                            related token list
         """
         # cache vars from tokenizer
         vocabSize = self.tokenizer.vocabSize
@@ -78,7 +81,7 @@ class TokenGraph(object):
         textCount = len([None for _ in iterator()])
         # iterate over texts returned by iterator
         for i, text in enumerate(tqdm(iterator(), total=textCount)):
-            if i > 10000:
+            if i > 1:
                 break
             # get mechanical scores of tokens in text
             tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
@@ -87,20 +90,20 @@ class TokenGraph(object):
                 for relId, relScore in tokenScores.items():
                     corrMatrix[id, relId] += (score * relScore)
 
-        def norm_sort_and_filter_row(rowVals, n):
+        def norm_sort_and_filter_row(rowVals):
             """
             Helper takes a single row from corr matrix and returns top n tokens
             from row after norming.
             """
             # norm row to unit sum
             rowSum = np.sum(rowVals)
-            normdVals = np.divide(rowVals, rowSum)
+            normedVals = np.divide(rowVals, (rowSum + ZERO_BOOSTER))
             ## tag and grab top n tokens from normedVals as tuple (score, id) ##
             topVals = [(val, id) for id, val in enumerate(normedVals[:n])]
             minElt = min(topVals, key=itemgetter(1))
             minVal, minLoc = minElt[0], minElt[1]
             for id, val in enumerate(normedVals[n:]):
-                if val > minElt:
+                if val > minVal:
                     _ = topVals.pop(minLoc)
                     topVals.append((val, id + n))
                     minElt = min(topVals, key=itemgetter(1))
@@ -110,7 +113,7 @@ class TokenGraph(object):
 
         # build corr dict from corr matrix
         corrDict = {topId : norm_sort_and_filter_row(corrRow)
-                    for topId, corrRow in enumerate(corrMatrix)}
+                    for topId, corrRow in tqdm(enumerate(corrMatrix))}
 
         del corrMatrix
 
@@ -207,7 +210,7 @@ class TokenGraph(object):
         for token, freq in tokenFreqs.items():
             rawWeights[candidateTokens[token]] += 1
         # norm weight vector to unit
-        normedWeights = np.divide(rawWeights, sum(rawWeights))
+        normedWeights = np.divide(rawWeights, (sum(rawWeights) + ZERO_BOOSTER))
         # pass normed weight vector through ranked matrix
         convergedWeights = np.dot(iterCorr, normedWeights)
         # build reverse index to access original token id from mini id
@@ -216,4 +219,3 @@ class TokenGraph(object):
         # return dict mapping tokens to their ranked weights
         return {reverseCandidateIdx[newId] : weight
                 for newId, weight in enumerate(convergedWeights)}
-                

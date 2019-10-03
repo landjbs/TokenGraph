@@ -225,7 +225,8 @@ class TokenGraph(object):
             # add all pointer from baseId
             for relatedScore, relatedToken in curRelated:
                 relatedId = candidateTokens[relatedToken]
-                miniCorr[baseId, relatedId] += relatedScore\
+                miniCorr[baseId, relatedId] += relatedScore
+                miniCorr[relatedId, baseId] += relatedScore
         # approximate graph ranking over miniCorr for iter iterations
         iterCorr = np.linalg.matrix_power(miniCorr, n=iter)
         # build initial weight vector of all candidate tokens

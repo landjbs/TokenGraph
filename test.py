@@ -20,13 +20,15 @@ from structs.tokengraph import TokenGraph
 
 graphObj = TokenGraph()
 graphObj.load('data/outData/10000Text_graphObj')
-graphObj.TEMP_corr_matrix_to_dict(n=10)
+graphObj.TEMP_corr_matrix_to_dict(n=20)
+graphObj.save('data/outData/10000Dict_graphObj')
+
 
 while True:
     t = input('t: ')
     topTokens = (graphObj.DICT_graph_rank_text(t, 20, 0.00001))
     topList = [(score, id) for id, score in topTokens.items()]
     topList.sort(reverse=True, key=(lambda elt : elt[0]))
-    for score, id in topList:
+    for score, id in topList[:7]:
         word = graphObj.tokenizer.reverseIdx[id]
         print(f'<{score}> {word}')

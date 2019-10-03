@@ -124,6 +124,44 @@ class TokenGraph(object):
         self.initialized = True
         return True
 
+    def TEMP_corr_matrix_to_dict(self, n):
+        corrMatrix = self.corrMatrix
+
+        def norm_sort_and_filter_row(rowVals):
+            """
+            Helper takes a single row from corr matrix and returns top n tokens
+            from row after norming.
+            """
+            # norm row to unit sum
+            rowSum = np.sum(rowVals)
+            if (rowSum == 0):
+                return []
+            normedVals = np.divide(rowVals, rowSum)
+            ## tag and grab top n tokens from normedVals as tuple (score, id) ##
+            topVals = [(val, id) for id, val in enumerate(normedVals[:n])]
+            minElt = min(topVals, key=itemgetter(1))
+            minVal, minLoc = minElt[0], minElt[1]
+            for id, val in enumerate(normedVals[n:]):
+                if val > minVal:
+                    _ = topVals.pop(minLoc)
+                    topVals.append((val, id + n))
+                    minElt = min(topVals, key=itemgetter(1))
+                    minVal, minLoc = minElt[0], minElt[1]
+            topVals.sort(reverse=True, key=itemgetter(1))
+            return topVals
+
+        # build corr dict from corr matrix
+        corrDict = {topId : norm_sort_and_filter_row(corrRow)
+                    for topId, corrRow in tqdm(enumerate(corrMatrix))}
+
+        del corrMatrix
+
+        self.corrMatrix = None
+        self.corrDict = corrDict
+        self.initialized = True
+        return True
+
+
     def graph_rank_text(self, text, iter=2, delta=0.001, n=5):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)

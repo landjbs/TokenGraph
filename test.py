@@ -19,9 +19,8 @@ from structs.tokengraph import TokenGraph
 # del tokenizerObj
 
 graphObj = TokenGraph()
-graphObj.load('data/outData/10000Text_graphObj')
-graphObj.TEMP_corr_matrix_to_dict(n=20)
-graphObj.save('data/outData/10000Dict_graphObj')
+graphObj.load('data/outData/10000Dict_graphObj')
+print(graphObj)
 
 
 while True:

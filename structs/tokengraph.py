@@ -184,16 +184,15 @@ class TokenGraph(object):
         relatedTokens = {token : self.corrDict[token]
                             for token in tokenFreqs.keys()}
         # build a dict of candidates for scoring and new id in miniCorr
-        candidateTokens = dict()
-        newId = 0
+        candidateSet = set()
         for token in relatedTokens.keys():
-            candidateTokens.update({token : newId})
-            newId += 1
+            candidateTokens.add(token)
         for tokenList in relatedTokens.values():
             for _, token in tokenList:
-                print(token)
-                candidateTokens.update({token : newId})
-                newId += 1
+                candidateTokens.add(token)
+        candidateTokens = {newId : oldId for newId, oldId
+                            in enumerate(candidateSet)}
+        del candidateSet
         # miniCorr matrix has dims equal to cardinality of candidate dict
         candidateNum = len(candidateTokens)
         miniCorr = np.zeros(shape=(candidateNum, candidateNum)) + ZERO_BOOSTER
@@ -203,8 +202,14 @@ class TokenGraph(object):
             baseId = candidateTokens[baseToken]
             # add all pointer from baseId
             for relatedScore, relatedToken in curRelated:
-                relatedId = candidateTokens[relatedToken]
-                miniCorr[baseId, relatedId] += relatedScore
+                try:
+                    relatedId = candidateTokens[relatedToken]
+                    miniCorr[baseId, relatedId] += relatedScore
+                except:
+                    print(candidateTokens)
+                    print(miniCorr.shape)
+                    print(baseId, relatedId)
+                    raise ValueError('no')
         # approximate graph ranking over miniCorr for iter iterations
         iterCorr = np.linalg.matrix_power(miniCorr, n=iter)
         # build initial weight vector of all candidate tokens

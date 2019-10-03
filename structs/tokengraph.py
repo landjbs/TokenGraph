@@ -43,7 +43,7 @@ class TokenGraph(object):
                                 'prior to saving.')
         assert self.initialized, 'TokenGraph must be initialized before saving.'
         utils.safe_make_folder(path)
-        np.save(f'{path}/corrMatrix', self.corrMatrix)
+        utils.save_obj(self.corrDict, f'{path}/corrDict.sav')
         self.tokenizer.save(f'{path}/tokenizer')
         return True
 

@@ -124,22 +124,6 @@ class TokenGraph(object):
         self.initialized = True
         return True
 
-    # TODO: Deprecate searching
-    def search_related_tokens(self, text, n=5):
-        """ Finds tokens in text and returns top n related tokens """
-        # TODO: REIMP OR REMOVE
-        is_positive = lambda score : score > 0
-        tokenScores = self.tokenizer.single_mechanically_score_tokens(text)
-        for id in tokenScores:
-            relatedTokens = [(relId, score) for relId, score
-                            in enumerate(self.corrMatrix[id])
-                            if is_positive(score)]
-            relatedTokens.sort(reverse=True, key=itemgetter(1))
-            topTokens = relatedTokens[:n]
-            print(f'{"-"*80}\n{id}')
-            for relToken in topTokens:
-                print(f'<{relToken[1]}> {self.tokenizer.reverseIdx[relToken[0]]}')
-
     def graph_rank_text(self, text, iter=2, delta=0.001, n=5):
         # find token counts in text
         tokenFreqs = self.tokenizer.single_mechanically_score_tokens(text)

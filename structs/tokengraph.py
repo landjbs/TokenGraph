@@ -117,16 +117,6 @@ class TokenGraph(object):
         corrDict = {topId : norm_sort_and_filter_row(corrRow)
                     for topId, corrRow in tqdm(enumerate(corrMatrix))}
 
-        while True:
-            t = input('t: ')
-            if t == 'b':
-                break
-            try:
-                print(corrDict[self.tokenizer.idx[t]])
-            except:
-                pass
-
-
         del corrMatrix
 
         # update object
@@ -226,6 +216,7 @@ class TokenGraph(object):
         normedWeights = np.divide(rawWeights, (sum(rawWeights) + ZERO_BOOSTER))
         # pass normed weight vector through ranked matrix
         convergedWeights = np.dot(iterCorr, normedWeights)
+        print(convergedWeights)
         # build reverse index to access original token id from mini id
         reverseCandidateIdx = {newId : oldId for oldId, newId
                                 in candidateTokens.items()}

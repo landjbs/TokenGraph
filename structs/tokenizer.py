@@ -45,7 +45,7 @@ class Tokenizer(object):
                                         f'type {type(path)}.')
         assert self.initialized, 'Tokenizer must be initialized before saving.'
         utils.safe_make_folder(path)
-        # save neccessary attributes for loss-less reconstruction
+        # save neccessary attributes for lossless reconstruction
         utils.save_obj(self.freqDict, f'{path}/freqDict')
         utils.save_obj(self.idx, f'{path}/idx')
         utils.save_obj(self.tokenizer, f'{path}/tokenizer')

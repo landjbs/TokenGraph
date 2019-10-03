@@ -117,6 +117,16 @@ class TokenGraph(object):
         corrDict = {topId : norm_sort_and_filter_row(corrRow)
                     for topId, corrRow in tqdm(enumerate(corrMatrix))}
 
+        while True:
+            t = input('t: ')
+            if t == 'b':
+                break
+            try:
+                print(corrDict[self.tokenizer.idx[t]])
+            except:
+                pass
+
+
         del corrMatrix
 
         # update object
@@ -194,7 +204,7 @@ class TokenGraph(object):
                 print(token)
                 candidateTokens.update({token : newId})
                 newId += 1
-        # miniCorr matrix has dimensions equal to cardinality of candidate dict
+        # miniCorr matrix has dims equal to cardinality of candidate dict
         candidateNum = len(candidateTokens)
         miniCorr = np.zeros(shape=(candidateNum, candidateNum))
         # update correlation pointers in minCorr matrix

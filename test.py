@@ -25,7 +25,7 @@ print(graphObj)
 
 while True:
     t = input('t: ')
-    topTokens = (graphObj.DICT_graph_rank_text(t, 20, 0.00001))
+    topTokens = (graphObj.DICT_graph_rank_text(t, 20, 0.0000001))
     topList = [(score, id) for id, score in topTokens.items()]
     topList.sort(reverse=True, key=(lambda elt : elt[0]))
     for score, id in topList[:7]:

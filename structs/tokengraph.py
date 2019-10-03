@@ -186,10 +186,10 @@ class TokenGraph(object):
         # build a dict of candidates for scoring and new id in miniCorr
         candidateSet = set()
         for token in relatedTokens.keys():
-            candidateTokens.add(token)
+            candidateSet.add(token)
         for tokenList in relatedTokens.values():
             for _, token in tokenList:
-                candidateTokens.add(token)
+                candidateSet.add(token)
         candidateTokens = {newId : oldId for newId, oldId
                             in enumerate(candidateSet)}
         del candidateSet

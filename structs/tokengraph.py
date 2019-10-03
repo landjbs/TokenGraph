@@ -197,14 +197,12 @@ class TokenGraph(object):
         candidateNum = len(candidateTokens)
         miniCorr = np.zeros(shape=(candidateNum, candidateNum))
         # update correlation pointers in minCorr matrix
-        for baseToken, relatedToken in relatedTokens.items():
+        for baseToken, curRelated in relatedTokens.items():
             # find new id of baseToken
             baseId = candidateTokens[baseToken]
             # add all pointer from baseId
-            for relatedToken, relatedScore in relatedTokens.items():
+            for relatedScore, relatedToken in curRelated:
                 relatedId = candidateTokens[relatedToken]
-                print(baseId, relatedId)
-                print(relatedScore)
                 miniCorr[baseId, relatedId] += relatedScore
         print(miniCorr)
         # approximate graph ranking over miniCorr for iter iterations

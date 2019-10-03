@@ -196,7 +196,7 @@ class TokenGraph(object):
                 newId += 1
         # miniCorr matrix has dims equal to cardinality of candidate dict
         candidateNum = len(candidateTokens)
-        miniCorr = np.zeros(shape=(candidateNum, candidateNum))
+        miniCorr = np.zeros(shape=(candidateNum, candidateNum)) + ZERO_BOOSTER
         # update correlation pointers in minCorr matrix
         for baseToken, curRelated in relatedTokens.items():
             # find new id of baseToken

@@ -28,7 +28,6 @@ print(graphObj.corrMatrix)
 while True:
     t = input('t: ')
     topTokens = (graphObj.DICT_graph_rank_text(t, 20, 0.00001))
-    print(topTokens)
     for id, score in topTokens.items():
         word = graphObj.tokenizer.reverseIdx[id]
         print(f'<{score}> {word}')

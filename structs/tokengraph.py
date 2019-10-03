@@ -190,7 +190,7 @@ class TokenGraph(object):
         for tokenList in relatedTokens.values():
             for _, token in tokenList:
                 candidateSet.add(token)
-        candidateTokens = {newId : oldId for newId, oldId
+        candidateTokens = {oldId : newId for newId, oldId
                             in enumerate(candidateSet)}
         del candidateSet
         # miniCorr matrix has dims equal to cardinality of candidate dict
@@ -202,14 +202,8 @@ class TokenGraph(object):
             baseId = candidateTokens[baseToken]
             # add all pointer from baseId
             for relatedScore, relatedToken in curRelated:
-                try:
-                    relatedId = candidateTokens[relatedToken]
-                    miniCorr[baseId, relatedId] += relatedScore
-                except:
-                    print(candidateTokens)
-                    print(miniCorr.shape)
-                    print(baseId, relatedId)
-                    raise ValueError('no')
+                relatedId = candidateTokens[relatedToken]
+                miniCorr[baseId, relatedId] += relatedScore\
         # approximate graph ranking over miniCorr for iter iterations
         iterCorr = np.linalg.matrix_power(miniCorr, n=iter)
         # build initial weight vector of all candidate tokens
@@ -221,7 +215,6 @@ class TokenGraph(object):
         normedWeights = np.divide(rawWeights, (sum(rawWeights) + ZERO_BOOSTER))
         # pass normed weight vector through ranked matrix
         convergedWeights = np.dot(iterCorr, normedWeights)
-        print(convergedWeights)
         # build reverse index to access original token id from mini id
         reverseCandidateIdx = {newId : oldId for oldId, newId
                                 in candidateTokens.items()}

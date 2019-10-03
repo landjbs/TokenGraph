@@ -8,8 +8,8 @@ from structs.tokengraph import TokenGraph
 #                                     tokenNum=50000)
 # tokenizerObj.save('data/outData/50000_Tokenizer')
 
-tokenizerObj = Tokenizer()
-tokenizerObj.load('data/outData/50000_Tokenizer')
+# tokenizerObj = Tokenizer()
+# tokenizerObj.load('data/outData/50000_Tokenizer')
 # print(tokenizerObj)
 #
 # graphObj = TokenGraph(tokenizerObj)
@@ -18,12 +18,9 @@ tokenizerObj.load('data/outData/50000_Tokenizer')
 #
 # del tokenizerObj
 
-graphObj = TokenGraph(tokenizerObj)
-graphObj.build_corr_matrix_from_iterator(tokenizerObj.wiki_iterator, n=3)
-print(graphObj)
-print(graphObj.corrDict)
-print(graphObj.corrMatrix)
-# graphObj.load('data/outData/10000Text_graphObj')
+graphObj = TokenGraph()
+graphObj.load('data/outData/10000Text_graphObj')
+graphObj.TEMP_corr_matrix_to_dict(n=10)
 
 while True:
     t = input('t: ')

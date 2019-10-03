@@ -28,7 +28,6 @@ class TokenGraph(object):
                                                     ' Tokenizer or None.')
         self.tokenizer = tokenizer
         self.corrMatrix = None
-        # FIXME: IMP CORR DICT
         self.corrDict = None
         self.initialized = False
 
